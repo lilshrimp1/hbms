@@ -214,38 +214,37 @@ if ($userRole != 'Guest') {
                             </div>
                         </div>
                     </div>
+                <div class="col-md-6">
+                    <div class="reviews-container">
+                        <div class="reviews-header">
+                            <h2 class="reviews-title">LATEST FEEDBACKS</h2>
+                            <span class="reviews-count">Total Visible Reviews: <?= $total_visible_reviews ?></span>
+                        </div>
+                        <?php if (!empty($latest_reviews)): ?>
+                            <?php foreach ($latest_reviews as $review): ?>
+                                <div class="review-card">
+                                    <div class="reviewer-name"><?= htmlspecialchars($review['guest_name']) ?></div>
+                                    <div class="review-text"><?= htmlspecialchars(mb_strimwidth($review['comment'], 0, 100, '...')) ?></div>
+                                    <div class="rating">
+                                        <?php
+                                        $rating = (int)$review['rating'];
+                                        for ($i = 0; $i < $rating; $i++) {
+                                            echo "★";
+                                        }
+                                        for ($i = $rating; $i < 5; $i++) {
+                                            echo "☆";
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="review-card">
+                                <div class="review-text">No reviews available yet.</div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
-
-                <div class="reviews-container">
-    <div class="reviews-header">
-        <h2 class="reviews-title">LATEST FEEDBACKS</h2>
-        <span class="reviews-count">Total Visible Reviews: <?= $total_visible_reviews ?></span>
-    </div>
-    
-    <?php if (!empty($latest_reviews)): ?>
-        <?php foreach ($latest_reviews as $review): ?>
-            <div class="review-card">
-                <div class="reviewer-name"><?= htmlspecialchars($review['guest_name']) ?></div>
-                <div class="review-text"><?= htmlspecialchars(mb_strimwidth($review['comment'], 0, 100, '...')) ?></div>
-                <div class="rating">
-                    <?php 
-                    $rating = (int)$review['rating'];
-                    for ($i = 0; $i < $rating; $i++) {
-                        echo "★";
-                    }
-                    for ($i = $rating; $i < 5; $i++) {
-                        echo "☆";
-                    }
-                    ?>
-                </div>
-            </div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <div class="review-card">
-            <div class="review-text">No reviews available yet.</div>
-        </div>
-    <?php endif; ?>
-</div>
                     <div class="col-md-6">
                         <div class="card mb-4 border-0" style="background-image: url(../bed2.jpg); background-size: cover; background-position: center;">
                             <div class="card-body text-center text-white" style="background-color: rgba(0, 0, 0, 0.5); border-radius: 10px;">
@@ -350,39 +349,37 @@ if ($userRole != 'Guest') {
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card mb-4 shadow-lg" style="border-radius: 40px;">
-                            <div class="card-body">
-                                <h5 class="text-center">Latest Feedback</h5>
-                                <p>Total visible reviews: <?= $total_visible_reviews ?></p>
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Guest</th>
-                                                <th>Rating</th>
-                                                <th>Comment</th>
-                                                <th>Date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach ($latest_reviews as $review): ?>
-                                                <tr>
-                                                    <td><?= htmlspecialchars($review['guest_name']) ?></td>
-                                                    <td><?= htmlspecialchars($review['rating']) ?>/5</td>
-                                                    <td><?= htmlspecialchars(mb_strimwidth($review['comment'], 0, 50, '...')) ?></td>
-                                                    <td><?= htmlspecialchars(date('M j, Y', strtotime($review['created_at']))) ?></td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                <div class="col-md-6">
+                    <div class="reviews-container">
+                        <div class="reviews-header">
+                            <h2 class="reviews-title">LATEST FEEDBACKS</h2>
+                            <span class="reviews-count">Total Visible Reviews: <?= $total_visible_reviews ?></span>
                         </div>
+                        <?php if (!empty($latest_reviews)): ?>
+                            <?php foreach ($latest_reviews as $review): ?>
+                                <div class="review-card">
+                                    <div class="reviewer-name"><?= htmlspecialchars($review['guest_name']) ?></div>
+                                    <div class="review-text"><?= htmlspecialchars(mb_strimwidth($review['comment'], 0, 100, '...')) ?></div>
+                                    <div class="rating">
+                                        <?php
+                                        $rating = (int)$review['rating'];
+                                        for ($i = 0; $i < $rating; $i++) {
+                                            echo "★";
+                                        }
+                                        for ($i = $rating; $i < 5; $i++) {
+                                            echo "☆";
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="review-card">
+                                <div class="review-text">No reviews available yet.</div>
+                            </div>
+                        <?php endif; ?>
                     </div>
+                </div>
                     <div class="col-md-6">
                         <div class="card mb-4 border-0" style="background-image: url(../bed2.jpg); background-size: cover; background-position: center;">
                             <div class="card-body text-center text-white" style="background-color: rgba(0, 0, 0, 0.5); border-radius: 10px;">
