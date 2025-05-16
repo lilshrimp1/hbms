@@ -180,12 +180,19 @@ $amenities = Amenity::all();
                             <td><?= $amenity->description ?></td>
                             <td><?= $amenity->status ?></td>
                             <td>    
-                                <a href="edit.php?id=<?= $amenity->id ?>" class="action-button edit-button"">Edit</a>
+                                <a href="edit.php?id=<?= $amenity->id ?>" class="action-button edit-button">Edit</a>
                                 <?php if($amenity->status == 'Active'): ?>
-                                    <a href="deactivate.php?id=<?= $amenity->id ?>" class="action-button deactivate-button"">Deactivate</a>
+                                    <a href="deactivate.php?id=<?= $amenity->id ?>" class="action-button deactivate-button">Deactivate</a>
                                 <?php endif; ?>
                                 <?php if($amenity->status == 'Inactive'): ?>
                                     <a href="activate.php?id=<?= $amenity->id ?>" class="action-button activate-button">Activate</a>
+                                <?php endif; ?>
+                                <?php if(
+                                    isset($_SESSION['role']) && 
+                                    ($_SESSION['role'] == 'Super Admin' || $_SESSION['role'] == 'Admin') &&
+                                    !$amenity->isUsedInReservation($amenity->id)
+                                ): ?>
+                                    <a href="destroy.php?id=<?= $amenity->id ?>" class="action-button delete-button">Delete</a>
                                 <?php endif; ?>
                             </td>
                         </tr>

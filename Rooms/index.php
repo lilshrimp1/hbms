@@ -336,11 +336,11 @@
                                         ($_SESSION['role'] == 'Super Admin' || $_SESSION['role'] == 'Admin')
                                     ): ?>
                                         <?php if ($room->status == 'available' && !$room->hasPastReservations($room->id)): ?>
-                                            <a href="destroy.php?id=<?= $room->id ?>" class="action-button deactivate-button"
-                                               onclick="return confirm('Are you sure you want to permanently delete this room?');">Delete</a>
-                                        <?php elseif ($room->hasPastReservations($room->id) && $room->status != 'inactive'): ?>
-                                            <a href="deactivate.php?id=<?= $room->id ?>" class="action-button deactivate-button"
-                                               onclick="return confirm('This room has past reservations and will be deactivated instead of deleted. Continue?');">Deactivate</a>
+                                            <a href="destroy.php?id=<?= $room->id ?>" class="action-button deactivate-button">Delete</a>
+                                        <?php elseif ($room->hasPastReservations($room->id) && $room->status != 'Inactive'): ?>
+                                            <a href="deactivate.php?id=<?= $room->id ?>" class="action-button deactivate-button">Deactivate</a>
+                                        <?php elseif ($room->hasPastReservations($room->id) && $room->status != 'Active'): ?>
+                                            <a href="deactivate.php?id=<?= $room->id ?>" class="action-button deactivate-button">Activate</a>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 </td>
