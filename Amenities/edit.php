@@ -36,7 +36,7 @@
                                 <span class="icon"><i class="fa fa-book"></i></span>
                                 <span class="text">Room Management</span></a>
                         </li>
-                        <?php if(isset($_SESSION['role']) && ($_SESSION['role'] != 'Super Admin' && $_SESSION['role'] != 'Admin')){ ?>
+                        <?php if(isset($_SESSION['role']) && ($_SESSION['role'] != 'Front Desk' && $_SESSION['role'] != 'Guest')){ ?>
                         <li><a href="../Amenities/index.php">
                                 <span class="icon"><i class="fa fa-user"></i></span>
                                 <span class="text">Amenities</span></a>
