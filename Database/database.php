@@ -1,9 +1,9 @@
 <?php
 
 class database{
-    private $host = 'localhost:3306';
+    private $host = 'localhost';
     private $username = 'root';
-    private $password = 'Pathfinder11';
+    private $password = 'qwerty';
     private $database = 'hbms';
     public $conn;
 
