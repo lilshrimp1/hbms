@@ -48,6 +48,10 @@ class Review extends Model{
         : null; 
     }
 
+    public static function countByStatus($status){
+        return parent::countByStatus($status);
+    }
+
     public static function countByStatusAndRating($status, $rating = null){
         return parent::countByStatusAndRating($status, $rating);
     }

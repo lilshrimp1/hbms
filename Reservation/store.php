@@ -2,7 +2,7 @@
 session_start();
 include '../layout/header.php';
 include '../auth/super.php';
-require_once '../database.php';
+require_once '../Database/database.php';
 require_once '../models/Reservation.php';
 require_once '../models/Room.php';
 require_once '../models/Amenity.php';

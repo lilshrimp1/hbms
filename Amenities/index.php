@@ -1,4 +1,4 @@
-<?php require_once '../database.php'; 
+<?php require_once '../Database/database.php'; 
       require_once '../models/Amenity.php';
     $database = new database();
     $conn = $database->getConnection();

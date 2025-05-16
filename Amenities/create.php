@@ -2,7 +2,7 @@
       session_start();
       include '../auth/super.php';
       include '../layout/header.php';  
-      require_once '../database.php';
+      require_once '../Database/database.php';
      
 ?>
 <style>

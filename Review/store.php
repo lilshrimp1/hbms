@@ -1,7 +1,7 @@
 <?php
 session_start();
 include '../layout/header.php';
-require_once '../database.php';
+require_once '../Database/database.php';
 require_once '../models/Review.php';
 
 $database = new database();

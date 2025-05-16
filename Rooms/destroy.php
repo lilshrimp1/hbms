@@ -1,6 +1,6 @@
 <?php session_start(); ?>
 <?php include '../layout/header.php'; ?>
-<?php require_once '../database.php'; 
+<?php require_once '../Database/database.php'; 
       require_once '../models/Room.php';
     $database = new database();
     $conn = $database->getConnection();

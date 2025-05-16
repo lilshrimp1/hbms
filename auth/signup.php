@@ -1,5 +1,5 @@
 <?php
-require '../database.php';
+require '../Database/database.php';
 require_once '../models/User.php';
 session_start();
 

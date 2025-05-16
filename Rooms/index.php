@@ -1,5 +1,5 @@
 <?php 
-    require_once '../database.php';
+    require_once '../Database/database.php';
     require_once '../models/Room.php';
     
     $database = new database();

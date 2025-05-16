@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../database.php';
+require_once '../Database/database.php';
 require_once '../models/Reservation.php';
 require_once '../models/Room.php';
 

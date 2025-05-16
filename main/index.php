@@ -1,4 +1,4 @@
-<?php require_once '../database.php'; 
+<?php require_once '../Database/database.php'; 
     $database = new database();
     $conn = $database->getConnection();
     require_once '../models/Room.php';

@@ -4,7 +4,7 @@ class Model{
     protected static $conn;
     protected static $table;
 
-    protected static function setConnection($conn){
+    public static function setConnection($conn){
         self::$conn = $conn;
     }
 
