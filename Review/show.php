@@ -1,5 +1,5 @@
 <?php
-require_once '../database.php';
+require_once '../Database/database.php';
 require_once '../models/Review.php';
 require_once '../models/User.php';
 require_once '../models/Reservation.php';
@@ -262,7 +262,7 @@ $user = $reservation ? User::find($reservation->user_id) : null;
                                 <span class="icon"><i class="fa fa-book"></i></span>
                                 <span class="text">Room Management</span></a>
                         </li>
-                        <?php if(isset($_SESSION['role']) && ($_SESSION['role'] != 'Librarian' && $_SESSION['role'] != 'Admin')){ ?>
+                        <?php if(isset($_SESSION['role']) && ($_SESSION['role'] == 'Super Admin')){ ?>
                         <li><a href="../Amenities/index.php">
                                 <span class="icon"><i class="fa fa-user"></i></span>
                                 <span class="text">Amenities</span></a>
@@ -328,7 +328,7 @@ $user = $reservation ? User::find($reservation->user_id) : null;
         <?php if ($user): ?>
             <hr>
             <h5>User Info</h5>
-            <p><strong>Name:</strong> <?= htmlspecialchars($user->first_name . ' ' . $user->last_name) ?></p>
+            <p><strong>Name:</strong> <?= htmlspecialchars($user->name) ?></p>
             <p><strong>Email:</strong> <?= htmlspecialchars($user->email) ?></p>
         <?php endif; ?>
 
