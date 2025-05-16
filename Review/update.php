@@ -48,4 +48,3 @@ if ($amenity) {
 
 ?>
 
-<?php include '../layout/footer.php';?>
