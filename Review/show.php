@@ -1,5 +1,5 @@
 <?php
-require_once '../database.php';
+require_once '../Database/database.php';
 require_once '../models/Review.php';
 require_once '../models/User.php';
 require_once '../models/Reservation.php';
@@ -262,22 +262,22 @@ $user = $reservation ? User::find($reservation->user_id) : null;
                                 <span class="icon"><i class="fa fa-book"></i></span>
                                 <span class="text">Room Management</span></a>
                         </li>
-                        <?php if(isset($_SESSION['role']) && ($_SESSION['role'] != 'Librarian' && $_SESSION['role'] != 'Admin')){ ?>
+                        <?php if(isset($_SESSION['role']) && ($_SESSION['role'] == 'Super Admin')){ ?>
                         <li><a href="../Amenities/index.php">
                                 <span class="icon"><i class="fa fa-user"></i></span>
                                 <span class="text">Amenities</span></a>
                         </li>
-                        <li><a href="../main/pdf.php">
-                                <span class="icon"><i class="fa fa-file-pdf"></i></span>
-                                <span class="text">Feedback</span></a>
-                        </li>
-                        <li><a href="../main/pdf.php">
-                                <span class="icon"><i class="fa fa-file-pdf"></i></span>
+                        <li><a href="../Reservation/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
                                 <span class="text">Reservation</span></a>
                         </li>
-                        <li><a href="../main/pdf.php">
-                                <span class="icon"><i class="fa fa-file-pdf"></i></span>
-                                <span class="text">PDF</span></a>
+                        <li><a href="../Review/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
+                                <span class="text">Feedback</span></a>
+                        </li>
+                        <li><a href="../User/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
+                                <span class="text">Manage User</span></a>
                         </li>
                         <li><a href="../auth/logout.php">
                                 <span class="icon"><i class="fa fa-sign-out"></i></span>
@@ -328,7 +328,7 @@ $user = $reservation ? User::find($reservation->user_id) : null;
         <?php if ($user): ?>
             <hr>
             <h5>User Info</h5>
-            <p><strong>Name:</strong> <?= htmlspecialchars($user->first_name . ' ' . $user->last_name) ?></p>
+            <p><strong>Name:</strong> <?= htmlspecialchars($user->name) ?></p>
             <p><strong>Email:</strong> <?= htmlspecialchars($user->email) ?></p>
         <?php endif; ?>
 

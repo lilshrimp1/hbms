@@ -1,6 +1,6 @@
 <?php session_start(); ?>
 <?php include '../layout/header.php'; ?>
-<?php require_once '../database.php'; ?>
+<?php require_once '../Database/database.php'; ?>
 <?php require_once '../models/Review.php'; ?>
 
 <?php
