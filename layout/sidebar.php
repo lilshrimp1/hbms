@@ -152,7 +152,7 @@ $roleDisplay = $_SESSION['role'] ?? 'Guest';
   <ul class="nav flex-column text-center">
     <li class="nav-item mb-3"><a class="nav-link btn-sidebar" href="../main/index.php">DASHBOARD</a></li>
     <li class="nav-item mb-3"><a class="nav-link btn-sidebar" href="../Rooms/index.php">ROOM MANAGEMENT</a></li>
-    <?php if (isset($_SESSION['role']) && $_SESSION['role'] != 'Librarian' && $_SESSION['role'] != 'Admin'): ?>
+    <?php if (isset($_SESSION['role']) && $_SESSION['role'] != 'Front Desk' && $_SESSION['role'] != 'Admin'): ?>
       <li class="nav-item mb-3"><a class="nav-link btn-sidebar" href="../Amenities/index.php">AMENITIES</a></li>
     <?php endif; ?>
     <li class="nav-item mb-3"><a class="nav-link btn-sidebar" href="../reservation/index.php">RESERVATIONS</a></li>

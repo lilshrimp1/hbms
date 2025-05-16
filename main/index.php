@@ -193,7 +193,7 @@ if ($userRole != 'Guest') {
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="card mb-4 border-0" style="background-image: url(../lobby1.jpg); background-size: cover; background-position: center;">
+                        <div class="card mb-4 border-0" style="background-image: url(../images/Lobby1.jpg); background-size: cover; background-position: center;">
                             <div class="card-body" style="background-color: rgba(0, 0, 0, 0.5); border-radius: 10px;">
                                 <h5 class="text-center text-white">Upcoming Reservations</h5>
                                 <ul class="list-group">
@@ -246,7 +246,7 @@ if ($userRole != 'Guest') {
                     </div>
                 </div>
                     <div class="col-md-6">
-                        <div class="card mb-4 border-0" style="background-image: url(../bed2.jpg); background-size: cover; background-position: center;">
+                        <div class="card mb-4 border-0" style="background-image: url(../images/Room1.jpg); background-size: cover; background-position: center;">
                             <div class="card-body text-center text-white" style="background-color: rgba(0, 0, 0, 0.5); border-radius: 10px;">
                                 <h5 class="text-center fw-bold mb-4">Room Status</h5>
                                 <div class="row">
@@ -328,7 +328,7 @@ if ($userRole != 'Guest') {
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="card mb-4 border-0" style="background-image: url(../lobby1.jpg); background-size: cover; background-position: center;">
+                        <div class="card mb-4 border-0" style="background-image: url(../images/Lobby1.jpg); background-size: cover; background-position: center;">
                             <div class="card-body" style="background-color: rgba(0, 0, 0, 0.5); border-radius: 10px;">
                                 <h5 class="text-center text-white">Upcoming Reservations</h5>
                                 <ul class="list-group">
@@ -381,7 +381,7 @@ if ($userRole != 'Guest') {
                     </div>
                 </div>
                     <div class="col-md-6">
-                        <div class="card mb-4 border-0" style="background-image: url(../bed2.jpg); background-size: cover; background-position: center;">
+                        <div class="card mb-4 border-0" style="background-image: url(../images/Room1.jpg); background-size: cover; background-position: center;">
                             <div class="card-body text-center text-white" style="background-color: rgba(0, 0, 0, 0.5); border-radius: 10px;">
                                 <h5 class="text-center fw-bold mb-4">Room Status</h5>
                                 <div class="row">
@@ -462,7 +462,7 @@ if ($userRole != 'Guest') {
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="card mb-4 border-0" style="background-image: url(../lobby1.jpg); background-size: cover; background-position: center;">
+                        <div class="card mb-4 border-0" style="background-image: url(../images/Lobby1.jpg); background-size: cover; background-position: center;">
                             <div class="card-body" style="background-color: rgba(0, 0, 0, 0.5); border-radius: 10px;">
                                 <h5 class="text-center text-white">Upcoming Reservations</h5>
                                 <ul class="list-group">
@@ -484,7 +484,7 @@ if ($userRole != 'Guest') {
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="card mb-4 border-0" style="background-image: url(../bed2.jpg); background-size: cover; background-position: center;">
+                        <div class="card mb-4 border-0" style="background-image: url(../images/Room1.jpg); background-size: cover; background-position: center;">
                             <div class="card-body text-center text-white" style="background-color: rgba(0, 0, 0, 0.5); border-radius: 10px;">
                                 <h5 class="text-center fw-bold mb-4">Room Status</h5>
                                 <div class="row">
@@ -559,8 +559,11 @@ if ($userRole != 'Guest') {
                             </div>
                         </div>
                     </div>
+                </div> <!-- end row for Guest dashboard -->
+
+                <div class="row">
                     <div class="col-md-6">
-                        <div class="card mb-4 border-0" style="background-image: url(../lobby1.jpg); background-size: cover; background-position: center;">
+                        <div class="card mb-4 border-0" style="background-image: url(../images/Lobby1.jpg); background-size: cover; background-position: center;">
                             <div class="card-body" style="background-color: rgba(0, 0, 0, 0.5); border-radius: 10px;">
                                 <h5 class="text-center text-white">Upcoming Reservations</h5>
                                 <ul class="list-group">
@@ -581,11 +584,8 @@ if ($userRole != 'Guest') {
                             </div>
                         </div>
                     </div>
-                </div> <!-- end row for Guest dashboard -->
-
-                <div class="row justify-content-center">
                     <div class="col-md-6">
-                        <div class="card mb-4 border-0" style="background-image: url(../bed2.jpg); background-size: cover; background-position: center;">
+                        <div class="card mb-4 border-0" style="background-image: url(../images/Room1.jpg); background-size: cover; background-position: center;">
                             <div class="card-body text-center text-white" style="background-color: rgba(0, 0, 0, 0.5); border-radius: 10px;">
                                 <h5 class="text-center fw-bold mb-4">Room Status</h5>
                                 <div class="row justify-content-center">
