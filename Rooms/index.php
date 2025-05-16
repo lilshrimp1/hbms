@@ -1,6 +1,7 @@
 <?php 
     require_once '../Database/database.php';
     require_once '../models/Room.php';
+    require_once '../models/RoomType.php';
     
     $database = new database();
     $conn = $database->getConnection();
@@ -9,6 +10,8 @@
 
     Room::setConnection($conn);
     $rooms = Room::all();
+
+    RoomType::setConnection($conn);
 ?>
 
 <!DOCTYPE html>
@@ -315,11 +318,12 @@
                             <?php
                             $i = 1;
                             foreach($rooms as $room):
+                                $room_type = RoomType::find($room->type_id); // Move this line inside the loop
                             ?>
                             <tr>
                                 <td><?= $i++ ?></td>
                                 <td><?= $room->room_number ?></td>
-                                <td><?= $room->type_id ?></td>
+                                <td><?= $room_type->name ?></td>
                                 <td><?= $room->price ?></td>
                                 <td><?= $room->status ?></td>
                                 <td>

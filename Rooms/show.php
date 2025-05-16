@@ -13,7 +13,7 @@
 
     $roomType = RoomType::find($room->type_id);
 
-     Amenity::setConnection($conn);
+    Amenity::setConnection($conn);
 
     $amenities = Amenity::find($id);
 
