@@ -61,7 +61,7 @@ if ($result) {
     echo '<script>
             Swal.fire({
                 title: "Error!",
-                text: "Failed to save User record, please try again!",
+                text: "Failed to save Amenity record, please try again!",
                 icon: "error",
                 confirmButtonText: "Ok"
             }).then(function() {
