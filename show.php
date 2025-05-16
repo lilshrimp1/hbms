@@ -1,43 +1,34 @@
-<?php 
-require_once '../database.php'; 
+<?php
+require_once '../database.php';
 require_once '../models/Review.php';
-session_start();
 require_once '../models/User.php';
 require_once '../models/Reservation.php';
+session_start();
 include '../layout/header.php';
 include '../auth/super.php';
-
 
 $database = new database();
 $conn = $database->getConnection();
 
 Review::setConnection($conn);
-Reservation::setConnection($conn);
 User::setConnection($conn);
+Reservation::setConnection($conn);
 
-
-// Filter handling
-$rating_filter = isset($_GET['rating']) ? $_GET['rating'] : '';
-$date_filter = isset($_GET['date']) ? $_GET['date'] : '';
-$status_filter = isset($_GET['status']) ? $_GET['status'] : '';
-
-// Only one filter at a time
-if ($rating_filter) {
-    $reviews = Review::where('rating', '=', $rating_filter);
-} elseif ($date_filter) {
-    $reviews = Review::where('created_at', 'LIKE', $date_filter . '%');
-} elseif ($status_filter) {
-    $reviews = Review::where('status', '=', $status_filter);
-} else {
-    $reviews = Review::all();
+// Get review ID
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    echo "<div class='alert alert-danger'>Review ID is required.</div>";
+    exit;
 }
 
-// Ensure $reviews is always an array
-if (!$reviews) {
-    $reviews = [];
+$review = Review::find($_GET['id']);
+if (!$review) {
+    echo "<div class='alert alert-danger'>Review not found.</div>";
+    exit;
 }
+
+$reservation = Reservation::find($review->reservation_id);
+$user = $reservation ? User::find($reservation->user_id) : null;
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -97,7 +88,7 @@ if (!$reviews) {
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             padding: 1.5rem; 
             margin-top:70px; 
-            margin-left: 150px; 
+            margin-left: 420px; 
             margin-right: auto; 
             max-width: 95%; 
         }
@@ -326,55 +317,24 @@ if (!$reviews) {
             </header>
 
 <div class="data-table-container">
-    <div class="card shadow">
-        <div class="card-header bg-danger-subtle text-white d-flex justify-content-between">
-            <h2 class="text-left px-3">REVIEWS</h2>
-        </div>
-        
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="reviewsTable" class="table table-striped table-hovered table-bordered mt-4 mb-9">
-                        <tr>
-                            <th style = "text-align: center;">#</th>
-                            <th style = "text-align: center;">Reviewer Name</th>
-                            <th style = "text-align: center;">Rating</th>
-                            <th style = "text-align: center;">Comment</th>
-                            <th style = "text-align: center;">Status</th>
-                            <th style = "text-align: center;">Created At</th>
-                            <th style = "text-align: center;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach($reviews as $review): 
-                            $reservation = Reservation::find($review->reservation_id);
-                            $userResult = User::where('id', '=', $reservation->user_id);
-                            $user = is_array($userResult) && !empty($userResult) ? $userResult[0] : null;
-                            $room = Room::find($reservation->room_id);
-                            ?>
-                            <tr>
-                                <td><?= htmlspecialchars($review->id) ?></td>
-                                <td><?= htmlspecialchars($user->name) ?></td>
-                                <td><?= htmlspecialchars($review->rating) ?></td>
-                                <td><?= htmlspecialchars($review->comment) ?></td>
-                                <td><?= htmlspecialchars($review->status) ?></td>
-                                <td><?= htmlspecialchars($review->created_at) ?></td>
-                                    <td class="text-center">
-                                        <div class="d-flex justify-content-center gap-2">
-                                    <a href="show.php?id=<?= $review->id ?>" class="action-button view-button">View</a>
-                                    <a href="edit.php?id=<?= $review->id ?>" class="action-button edit-button">Edit</a>
-                                    <?php if(isset($_SESSION['role']) && ($_SESSION['role'] == 'Super Admin' || $_SESSION['role'] == 'Admin')): ?>
-                                        <a href="destroy.php?id=<?= $review->id ?>" class="action-button deactivate-button">Delete</a>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div class="card p-4 shadow-sm" style="max-width: 700px; margin: 0 auto;">
+        <h3 class="mb-3 text-center" style = "color:rgb(10, 83, 88);">Review Details</h3>
+
+        <p><strong>Rating:</strong> <?= htmlspecialchars($review->rating) ?> / 5</p>
+        <p><strong>Comment:</strong> <?= nl2br(htmlspecialchars($review->comment)) ?></p>
+        <p><strong>Status:</strong> <?= htmlspecialchars($review->status) ?></p>
+        <p><strong>Created At:</strong> <?= htmlspecialchars($review->created_at) ?></p>
+
+        <?php if ($user): ?>
+            <hr>
+            <h5>User Info</h5>
+            <p><strong>Name:</strong> <?= htmlspecialchars($user->first_name . ' ' . $user->last_name) ?></p>
+            <p><strong>Email:</strong> <?= htmlspecialchars($user->email) ?></p>
+        <?php endif; ?>
+
+        <a href="index.php" class="btn btn-secondary mt-4">Back to Reviews</a>
     </div>
 </div>
-
 
 <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -389,5 +349,3 @@ if (!$reviews) {
         });
     </script>
 </body>
-
-
