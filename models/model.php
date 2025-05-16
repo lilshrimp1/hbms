@@ -4,11 +4,11 @@ class Model{
     protected static $conn;
     protected static $table;
 
-    public static function setConnection($conn){
+    protected static function setConnection($conn){
         self::$conn = $conn;
     }
 
-    public static function find($id){
+    protected static function find($id){
         try{
             $sql = "SELECT * FROM "
                    . static::$table
@@ -24,7 +24,7 @@ class Model{
         }
     }
 
-    public static function countByStatus($status) {
+    protected static function countByStatus($status) {
         try {
             $sql = "SELECT COUNT(*) as count FROM " . static::$table . " WHERE status = ?";
             $stmt = self::$conn->prepare($sql);
@@ -37,7 +37,7 @@ class Model{
         }
     }
 
-    public static function countByStatusAndDate($status, $date_column = null, $operator = '=', $date_value = null) {
+    protected static function countByStatusAndDate($status, $date_column = null, $operator = '=', $date_value = null) {
         try {
             $sql = "SELECT COUNT(*) as count FROM " . static::$table . " WHERE status = ?";
             $params = [$status];
@@ -59,7 +59,7 @@ class Model{
         }
     }
 
-    public static function countByStatusAndRating($status, $rating = null) {
+    protected static function countByStatusAndRating($status, $rating = null) {
         try {
             $sql = "SELECT COUNT(*) as count FROM " . static::$table . " WHERE status = ?";
             $params = [$status];
@@ -80,8 +80,8 @@ class Model{
             die("Error: " . $e->getMessage());
         }
     }
-    
-    public static function findStatus($status) {
+
+    protected static function findStatus($status) {
         try {
             $sql = "SELECT * FROM "
                    . static::$table
@@ -97,7 +97,7 @@ class Model{
             die("Error: " . $e->getMessage());
         }
     }
-    public static function findByColumn($column, $value){
+    protected static function findByColumn($column, $value){
         try {
             $sql = "SELECT * FROM "
                    . static::$table
@@ -114,7 +114,7 @@ class Model{
         }
     }
 
-    public static function all(){
+    protected static function all(){
         try{
             $sql = "SELECT * FROM "
                    . static::$table
@@ -134,7 +134,7 @@ class Model{
 
     
 
-    public static function create(array $data){
+    protected static function create(array $data){
         try {
             $columns = implode(", ", array_keys($data));
             $placeholders = implode(", ", array_map(fn($key) => ":$key", array_keys($data)));
@@ -157,7 +157,7 @@ class Model{
         }
     }
 
-    public static function updateById($id, array $data){
+    protected static function updateById($id, array $data){
         try{
             $set = implode(", ", array_map(fn($key) => "$key = ?", array_keys($data)));
 
@@ -180,7 +180,7 @@ class Model{
         }
     }
 
-    public static function deleteById($id){
+    protected static function deleteById($id){
         try{
             $sql = "DELETE FROM "
                    . static::$table
