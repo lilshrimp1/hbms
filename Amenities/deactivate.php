@@ -15,16 +15,14 @@ if(isset($_POST['confirm_delete'])) {
     $id = $_GET['id'];
 
     $user = Amenity::find($id);
+    $user->status = 'Inactive';
 
-    $user->delete();
-    
-    if($user){
-        if($user){
-            echo '<script>
-                Swal.fire({
-                    title: "Deleted!",
-                    text: "The Amenity has been deleted.",
-                    icon: "success"
+    if($user->save()){
+        echo '<script>
+            Swal.fire({
+                title: "Deactivated!",
+                text: "The Amenity has been deactivated.",
+                icon: "success"
                 }).then(() => {
                     window.location = "index.php";
                 });
@@ -33,7 +31,7 @@ if(isset($_POST['confirm_delete'])) {
             echo '<script>
                 Swal.fire({
                     title: "Error!",
-                    text: "Failed to delete Amenity record, please try again!",
+                    text: "Failed to Deactivate Amenity, please try again!",
                     icon: "error",
                     confirmButtonText: "Ok"
                 }).then(() => {
@@ -41,9 +39,7 @@ if(isset($_POST['confirm_delete'])) {
                 });
             </script>';
         }
-    } else {
-        echo "Error preparing statement: " . mysqli_error($conn);
-    }
+    // No extra else here; remove the extra closing brace above
 } else {
     // Show confirmation dialog first
     echo '<script>

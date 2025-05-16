@@ -318,20 +318,31 @@
                             <?php
                             $i = 1;
                             foreach($rooms as $room):
-                                $room_type = RoomType::find($room->type_id); // Move this line inside the loop
+                                $room_type = RoomType::find($room->type_id);
+                                // Assume $room->status can be 'available', 'occupied', 'reserved', 'inactive'
+                                // Assume $room->hasPastReservations() returns true if room has past reservations
                             ?>
                             <tr>
                                 <td><?= $i++ ?></td>
                                 <td><?= $room->room_number ?></td>
-                                <td><?= $room_type->name ?></td>
+                                <td><?= $room_type ? $room_type->name : 'N/A' ?></td>
                                 <td><?= $room->price ?></td>
                                 <td><?= $room->status ?></td>
                                 <td>
                                     <a href="show.php?id=<?= $room->id ?>" class="action-button view-button">View</a>
                                     <a href="edit.php?id=<?= $room->id ?>" class="action-button edit-button">Edit</a>
-                                    <?php if(isset($_SESSION['role']) && ($_SESSION['role'] == 'Super Admin' || $_SESSION['role'] == 'Admin')){ ?>
-                                        <a href="destroy.php?id=<?= $room->id ?>" class="action-button deactivate-button">Delete</a>
-                                    <?php } ?>
+                                    <?php if (
+                                        isset($_SESSION['role']) && 
+                                        ($_SESSION['role'] == 'Super Admin' || $_SESSION['role'] == 'Admin')
+                                    ): ?>
+                                        <?php if ($room->status == 'available' && !$room->hasPastReservations($room->id)): ?>
+                                            <a href="destroy.php?id=<?= $room->id ?>" class="action-button deactivate-button"
+                                               onclick="return confirm('Are you sure you want to permanently delete this room?');">Delete</a>
+                                        <?php elseif ($room->hasPastReservations($room->id) && $room->status != 'inactive'): ?>
+                                            <a href="deactivate.php?id=<?= $room->id ?>" class="action-button deactivate-button"
+                                               onclick="return confirm('This room has past reservations and will be deactivated instead of deleted. Continue?');">Deactivate</a>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                             <?php endforeach; ?>

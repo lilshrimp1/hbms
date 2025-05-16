@@ -181,7 +181,12 @@ $amenities = Amenity::all();
                             <td><?= $amenity->status ?></td>
                             <td>    
                                 <a href="edit.php?id=<?= $amenity->id ?>" class="action-button edit-button"">Edit</a>
-                                <a href="destroy.php?id=<?= $amenity->id ?>" class="action-button deactivate-button"">Delete</a>
+                                <?php if($amenity->status == 'Active'): ?>
+                                    <a href="deactivate.php?id=<?= $amenity->id ?>" class="action-button deactivate-button"">Deactivate</a>
+                                <?php endif; ?>
+                                <?php if($amenity->status == 'Inactive'): ?>
+                                    <a href="activate.php?id=<?= $amenity->id ?>" class="action-button activate-button">Activate</a>
+                                <?php endif; ?>
                             </td>
                         </tr>
                         <?php endforeach; ?>

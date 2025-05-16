@@ -24,6 +24,13 @@ class Model{
         }
     }
 
+    protected static function hasPastReservations($room_id) {
+        $stmt = self::$conn->prepare("SELECT COUNT(*) FROM reservations WHERE room_id = ? AND check_out < NOW()");
+        $stmt->execute([$room_id]);
+        $count = $stmt->fetchColumn();
+        return $count > 0;
+    }
+
     protected static function countByStatus($status) {
         try {
             $sql = "SELECT COUNT(*) as count FROM " . static::$table . " WHERE status = ?";
