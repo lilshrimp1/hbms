@@ -227,10 +227,17 @@ function show404Error() {
                         <li><a href="../Amenities/index.php">
                                 <span class="icon"><i class="fa fa-user"></i></span>
                                 <span class="text">Amenities</span></a>
+                        <li><a href="../Reservation/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
+                                <span class="text">Reservation</span></a>
                         </li>
-                        <li><a href="../main/pdf.php">
-                                <span class="icon"><i class="fa fa-file-pdf"></i></span>
-                                <span class="text">PDF</span></a>
+                        <li><a href="../Review/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
+                                <span class="text">Feedback</span></a>
+                        </li>
+                        <li><a href="../User/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
+                                <span class="text">Manage User</span></a>
                         </li>
                         <li><a href="../auth/logout.php">
                                 <span class="icon"><i class="fa fa-sign-out"></i></span>
@@ -271,7 +278,7 @@ function show404Error() {
 
 <?php if(isset($room)): ?>
     <div class="data-table-container">
-    <div class="card shadow  mx-auto" style="max-height: 700px;">
+    <div class="card shadow  mx-auto" ">
         <div class="card-header bg-danger-subtle">
             <h2 class="text-left text-white px-3">Room Details</h2>
         </div>

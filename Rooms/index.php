@@ -71,7 +71,7 @@
             background-color: white;
             border-radius: 0.75rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 1.5rem; 
+            padding: 0.50rem; 
             margin-top: 120px; 
             margin-left: 300px; 
             margin-right: auto; 
@@ -224,6 +224,12 @@
         text-overflow: ellipsis; 
     }
 
+    .actions-cell {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: left;
+        gap: 8px;
+}
     </style>
 </head>
 <body class="bg" style="background-image:url(../images/bg.png); position:fixed;">
@@ -254,10 +260,18 @@
                         <span class="icon"><i class="fa fa-user"></i></span>
                         <span class="text">Amenities</span></a>
                     </li>
-                    <li><a href="../main/pdf.php">
-                        <span class="icon"><i class="fa fa-file-pdf"></i></span>
-                        <span class="text">PDF</span></a>
-                    </li>
+                        <li><a href="../Reservation/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
+                                <span class="text">Reservation</span></a>
+                        </li>
+                        <li><a href="../Review/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
+                                <span class="text">Feedback</span></a>
+                        </li>
+                        <li><a href="../User/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
+                                <span class="text">Manage User</span></a>
+                        </li>
                     <li><a href="../auth/logout.php">
                         <span class="icon"><i class="fa fa-sign-out"></i></span>
                         <span class="text">Logout</span></a>
@@ -301,6 +315,9 @@
                         background-color:#1BB3BD; text-decoration: none;">Add New Room</a>
                     </div>
 
+                    <div class="mb-3 text-end">
+                            <a href="fpdf.php" class="btn btn-danger">Export to PDF</a>
+                        </div>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full">
@@ -328,7 +345,7 @@
                                 <td><?= $room_type ? $room_type->name : 'N/A' ?></td>
                                 <td><?= $room->price ?></td>
                                 <td><?= $room->status ?></td>
-                                <td>
+                                <td class="actions-cell">
                                     <a href="show.php?id=<?= $room->id ?>" class="action-button view-button">View</a>
                                     <a href="edit.php?id=<?= $room->id ?>" class="action-button edit-button">Edit</a>
                                     <?php if (
