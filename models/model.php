@@ -24,6 +24,25 @@ class Model{
         }
     }
 
+    protected static function hasPastReservations($room_id) {
+        $stmt = self::$conn->prepare("SELECT COUNT(*) FROM reservations WHERE room_id = ? AND check_out < NOW()");
+        $stmt->execute([$room_id]);
+        $count = $stmt->fetchColumn();
+        return $count > 0;
+    }
+
+    protected static function isUsedInReservation($amenity_id) {
+        // This query checks if the amenity is linked to any room that has been reserved
+        $sql = "SELECT COUNT(*) FROM reservations r
+                JOIN room_amenities ra ON r.room_id = ra.room_id
+                WHERE ra.amenity_id = ?";
+        
+        $stmt = self::$conn->prepare($sql);
+        $stmt->execute([$amenity_id]);
+        $count = $stmt->fetchColumn();
+        return $count > 0;
+    }
+
     protected static function countByStatus($status) {
         try {
             $sql = "SELECT COUNT(*) as count FROM " . static::$table . " WHERE status = ?";

@@ -46,6 +46,14 @@ class Amenity extends Model{
         : null; 
     }
 
+    public static function isUsedInReservation($id){
+        $result = parent::isUsedInReservation($id);
+
+        return (is_array($result) && !empty($result))
+        ? array_map(fn ($user) => new self($user), $result)
+        : null; 
+    }
+
     public static function findByColumn($column, $value){
         $result = parent::findByColumn($column, $value);
 

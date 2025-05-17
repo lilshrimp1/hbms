@@ -237,6 +237,7 @@ $amenities = Amenity::all();
                             <td><?= $amenity->status ?></td>
                             <td class="actions-cell">
                                 <a href="show.php?id=<?= $amenity->id ?>" class="action-button view-button">View</a>
+                            <td>    
                                 <a href="edit.php?id=<?= $amenity->id ?>" class="action-button edit-button">Edit</a>
                                 <?php if($amenity->status == 'Active'): ?>
                                     <a href="deactivate.php?id=<?= $amenity->id ?>" class="action-button deactivate-button">Deactivate</a>
