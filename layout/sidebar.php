@@ -158,7 +158,7 @@ $roleDisplay = $_SESSION['role'] ?? 'Guest';
     <li class="nav-item mb-3"><a class="nav-link btn-sidebar" href="../reservation/index.php">RESERVATIONS</a></li>
     <li class="nav-item mb-3"><a class="nav-link btn-sidebar" href="../Reservation/index.php">CHECK IN/CHECK OUT</a></li>
     <li class="nav-item mb-3"><a class="nav-link btn-sidebar" href="../Review/index.php">GUEST FEEDBACK</a></li>
-    <li class="nav-item mb-3"><a class="nav-link btn-sidebar" href="../User/create.php">MANAGE USER</a></li>
+    <li class="nav-item mb-3"><a class="nav-link btn-sidebar" href="../User/index.php">MANAGE USER</a></li>
     <li class="nav-item mt-auto mb-4"><a class="btn btn-danger w-75" href="../auth/logout.php">LOG OUT</a></li>
   </ul>
 </div>

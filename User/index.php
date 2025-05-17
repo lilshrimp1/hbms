@@ -169,13 +169,14 @@ $users = User::all();
                         </svg>
                         HBMS            
                     </div>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Room Management</a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Amenities</a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Reservations</a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Check-in/Check-out</a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Guest Feedbacks</a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Manage Users</a>
-                <a href="#" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Log Out</a>
+                <a href="../Main/index.php" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Dashboard</a>
+                <a href="../Rooms/index.php" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Room Management</a>
+                <a href="../Amenities/index.php" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Amenities</a>
+                <a href="../Reservation/index.php" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Reservations</a>
+                <a href="../Reservation/checkin_in_out.php" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Check-in/Check-out</a>
+                <a href="../Review/index.php" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Guest Feedbacks</a>
+                <a href="index.php" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Manage Users</a>
+                <a href="../auth/logout.php" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Log Out</a>
             </nav>
         </aside>
 
