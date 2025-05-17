@@ -1,186 +1,75 @@
-<?php
-require_once '../database/Database.php';
-include '../layout/header.php';
+<body class="bg" style="background-image:url(../image/bg.png); position:fixed;">
+    <div class="flex">
 
-if (!isset($_SESSION)) session_start();
+        <aside id="navbar" class=" text-blue-800 w-64" style="font-size: 20px; background-color: rgba(75, 216, 226, 0.75);">
 
-$currentPath = $_SERVER['REQUEST_URI'];
-$currentFolder = basename(dirname($currentPath));
-$currentFile = basename($currentPath);
+            <nav class="space-y-2 mt-16 mb-10 p-4" style="color:white; ">
+            <div class="logo text-xxl font-semibold text-white-800 flex items-center mb-5 ml-2 mt-4" style="font-size:40px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" fill="white" class="bi bi-house-fill" viewBox="0 0 16 16">
+                            <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z"/>
+                            <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293z"/>
+                            </svg>
+                            HBMS
+                        </div>
+                        <a href="../Main/index.php" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Dashboard</a>
+                        <a href="../Rooms/index.php" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Room Management</a>
+                        <a href="../Amenities/index.php" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Amenities</a>
+                        <a href="../Reservation/index.php" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Reservations</a>
+                        <a href="../Reservation/checkin_in_out.php" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Check-in/Check-out</a>
+                        <a href="../Review/index.php" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Guest Feedbacks</a>
+                        <a href="index.php" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Manage Users</a>
+                        <a href="../auth/logout.php" class="block px-4 py-2 rounded hover:bg-teal-200 transition-colors">Log Out</a>
+            </nav>
+        </aside>
 
-// Page title
-function getPageTitle($folder, $file) {
-  switch ($folder) {
-    case 'main': return 'Dashboard';
-    case 'Rooms': return 'Room Management';
-    case 'Amenities': return 'Amenities';
-    case 'reservation': return 'Reservations';
-    case 'Reservation': return 'Check In/Check Out';
-    case 'User': return 'Manage User';
-  }
-  if ($file === 'Review.php' || $folder === 'Review') return 'Guest Feedback';
-  return 'HBMS';
-}
-$pageTitle = getPageTitle($currentFolder, $currentFile);
+        <main class="flex-1 p-8">
+            <header>
+                <div class="flex">
+                <div class="menu-container mr-4">
+                                <button id="menu-button" class="bg-white-500 text-black m flex items-center gap-2" >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                                    </svg>
+                                    MENU
+                                </button>
+                            </div>
+                            </div>
 
-// Role display
-function getRoleDisplay($role) {
-  switch ($role) {
-    case 'Superadmin':
-    case 'Admin':
-    case 'Front Desk':
-      return $role;
-    default:
-      return htmlspecialchars($role);
-  }
-}
-$roleDisplay = $_SESSION['role'] ?? 'Guest';
-?>
+                            <div class="logo text-xl font-semibold text-gray-800 flex items-center" style="margin-left: auto; position:relative; text-align:middle;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-house-fill" viewBox="0 0 16 16">
+                                <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z"/>
+                                <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293z"/>
+                                </svg>
+                                HBMS
+                            </div>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title><?php echo $pageTitle; ?> - HBMS</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome -->
-  <script src="https://kit.fontawesome.com/YOUR_KIT_ID.js" crossorigin="anonymous"></script>
-  <!-- Replace YOUR_KIT_ID with your FontAwesome Kit -->
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
+                            <div class = "profile mr-4">
+                                <div class="text-gray-600 mr-4">Super</div>
+                                <img src="https://placehold.co/40x40/80ED99/fff?text=U&font=Montserrat" alt="User Avatar" class="rounded-full">
+                            </div>
+                        </header>
 
-    /* Sidebar */
-    #sidebar {
-      position: fixed;
-      top: 0;
-      left: -260px;
-      width: 260px;
-      height: 100%;
-      background: rgba(75, 216, 226, 0.85);
-      padding-top: 100px;
-      transition: left 0.3s ease;
-      z-index: 1000;
-    }
 
-    #sidebar.active {
-      left: 0;
-    }
 
-    .btn-sidebar {
-      display: block;
-      padding: 12px 20px;
-      margin: 10px auto;
-      width: 80%;
-      font-size: 18px;
-      background-color: #fff;
-      border-radius: 8px;
-      color: #000;
-      text-decoration: none;
-      transition: background-color 0.3s;
-    }
-
-    .btn-sidebar:hover {
-      background-color: #e5e7eb;
-    }
-
-    .toggle-btn {
-      font-size: 30px;
-      cursor: pointer;
-      color: white;
-    }
-
-    .navbar {
-      padding: 25px;
-      z-index: 1100;
-    }
-
-    .profile-info {
-      display: flex;
-      align-items: center;
-      font-size: 20px;
-      color: white;
-    }
-
-    .profile-circle {
-      width: 40px;
-      height: 40px;
-      background-color: #80ED99;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-
-    main {
-      transition: margin-left 0.3s ease;
-      padding: 20px;
-      margin-top: 100px;
-    }
-
-    main.shifted {
-      margin-left: 260px;
-    }
-
-    .hbms-title, .page-title {
-      font-size: 30px;
-      color: white;
-    }
-  </style>
-</head>
-<body>
-
-<!-- ✅ TOP NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-  <div class="container-fluid d-flex justify-content-between align-items-center">
-    <div class="d-flex align-items-center gap-4">
-      <div class="toggle-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
-      <div class="hbms-title">HBMS</div>
-    </div>
-    <div class="page-title"><?php echo $pageTitle; ?></div>
-    <div class="profile-info">
-      <div class="profile-circle"></div>
-      <div><?php echo $roleDisplay; ?></div>
-    </div>
-  </div>
-</nav>
-
-<!-- ✅ SIDEBAR -->
-<div class="sidebar" id="sidebar">
-  <ul class="nav flex-column text-center">
-    <li class="nav-item mb-3"><a class="nav-link btn-sidebar" href="../main/index.php">DASHBOARD</a></li>
-    <li class="nav-item mb-3"><a class="nav-link btn-sidebar" href="../Rooms/index.php">ROOM MANAGEMENT</a></li>
-    <?php if (isset($_SESSION['role']) && $_SESSION['role'] != 'Front Desk' && $_SESSION['role'] != 'Admin'): ?>
-      <li class="nav-item mb-3"><a class="nav-link btn-sidebar" href="../Amenities/index.php">AMENITIES</a></li>
-    <?php endif; ?>
-    <li class="nav-item mb-3"><a class="nav-link btn-sidebar" href="../reservation/index.php">RESERVATIONS</a></li>
-    <li class="nav-item mb-3"><a class="nav-link btn-sidebar" href="../Reservation/index.php">CHECK IN/CHECK OUT</a></li>
-    <li class="nav-item mb-3"><a class="nav-link btn-sidebar" href="../Review/index.php">GUEST FEEDBACK</a></li>
-    <li class="nav-item mb-3"><a class="nav-link btn-sidebar" href="../User/index.php">MANAGE USER</a></li>
-    <li class="nav-item mt-auto mb-4"><a class="btn btn-danger w-75" href="../auth/logout.php">LOG OUT</a></li>
-  </ul>
-</div>
-
-<!-- ✅ MAIN CONTENT AREA -->
-<main id="main">
-  <div class="container">
-    <h2>Welcome to HBMS - <?php echo $pageTitle; ?></h2>
-    <!-- Your page content here -->
-  </div>
-</main>
-
-<!-- ✅ JS SCRIPTS -->
 <script>
-  function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const main = document.getElementById('main');
-    sidebar.classList.toggle('active');
-    main.classList.toggle('shifted');
-  }
-</script>
+        const menuContainer = document.querySelector('.menu-container');
+        const navbar = document.querySelector('#navbar');
+        const mainContent = document.querySelector('main');
+        let isNavbarVisible = false;
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+        menuContainer.addEventListener('mouseenter', () => {
+            navbar.classList.add('show');
+            mainContent.classList.add('shifted');
+            isNavbarVisible = true;
+        });
+
+        navbar.addEventListener('mouseleave', () => {
+            navbar.classList.remove('show');
+            mainContent.classList.remove('shifted');
+            isNavbarVisible = false;
+        });
+
+        navbar.addEventListener('mouseenter', () => {
+            isNavbarVisible = true;
+        })
+</script>                        

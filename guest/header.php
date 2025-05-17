@@ -1,5 +1,5 @@
 <?php 
-require_once '/layout/modals/modals.php';
+require_once '/git/Moses_hbms/layout/modals/modals.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
