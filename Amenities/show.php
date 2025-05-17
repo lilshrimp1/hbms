@@ -1,6 +1,7 @@
 <?php 
 require_once '../Database/database.php';
 require_once '../models/Amenity.php';
+require_once '../models/Reservation.php';
 
 $database = new database();
 $conn = $database->getConnection();
@@ -8,6 +9,7 @@ session_start();
 include '../auth/super.php'; 
 
 Amenity::setConnection($conn);
+Reservation::setConnection($conn);
 
 if (!isset($_GET['id'])) {
     die('Error: Amenity ID is not provided in the URL.');
@@ -20,7 +22,7 @@ if (!$amenity) {
     die('Error: Amenity not found.');
 }
 
-$currentGuest = $amenity->getCurrentGuestInfo();
+$currentGuest = Amenity::getCurrentGuestInfo($id);
 ?>
 
 <?php include '../layout/header.php'; ?>
@@ -91,17 +93,20 @@ $currentGuest = $amenity->getCurrentGuestInfo();
                 <h3 class="px-3">Current Guest Information</h3>
             </div>
             <div class="card-body">
-                <p><strong>Full Name:</strong> <?= htmlspecialchars($currentGuest['full_name']) ?></p>
-                <p><strong>Contact Number:</strong> <?= htmlspecialchars($currentGuest['contact']) ?></p>
-                <p><strong>Check-in:</strong> <?= htmlspecialchars($currentGuest['check_in']) ?></p>
-                <p><strong>Check-out:</strong> <?= htmlspecialchars($currentGuest['check_out']) ?></p>
-                <p><strong>Number of Guests:</strong> <?= htmlspecialchars($currentGuest['guest_count']) ?></p>
+                <p><strong>Full Name:</strong> <?= htmlspecialchars($currentGuest->name) ?></p>
+                <p><strong>Contact Number:</strong> <?= htmlspecialchars($currentGuest->contact) ?></p>
+                <p><strong>Check-in:</strong> <?= htmlspecialchars($currentGuest->check_in) ?></p>
+                <p><strong>Check-out:</strong> <?= htmlspecialchars($currentGuest->check_out) ?></p>
+                <p><strong>Number of Guests:</strong> <?= htmlspecialchars($currentGuest->guest_count) ?></p>
             </div>
         </div>
         <?php else: ?>
-        <div class="card shadow">
-            <div class="card-body text-muted">
-                <em>No current guest information available.</em>
+        <div class="card shadow mb-5">
+            <div class="card-header bg-primary text-white">
+                <h3 class="px-3">Current Guest Information</h3>
+            </div>
+            <div class="card-body">
+                <p class="text-muted"><em>No guest is currently using this amenity.</em></p>
             </div>
         </div>
         <?php endif; ?>
