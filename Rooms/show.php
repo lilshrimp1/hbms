@@ -22,6 +22,8 @@
         exit();
     }
 
+
+
 // Function to display 404 error
 function show404Error() {
     echo '<div class="container-xxl mt-5">
@@ -37,6 +39,8 @@ function show404Error() {
           </div>';
     include '../layout/footer.php';
 }
+
+$currentGuest = Room::getCurrentGuestInfo($id);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -97,9 +101,9 @@ function show404Error() {
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             padding: 1.5rem; 
             margin-top: 60px; 
-            margin-left: 300px; 
+            margin-left: 450px; 
             margin-right: auto; 
-            max-width: 95%; 
+            max-width: 2000%; 
         }
 
         .overflow-x-auto {
@@ -312,6 +316,26 @@ function show404Error() {
                 <strong class="d-block mb-1" style="font-weight: bold; color: #333;">Status:</strong>
                 <span style="color: #555;"><?= $room->status ?></span>
             </div>
+                    <?php if ($currentGuest): ?>
+        <div class="card shadow mb-5">
+            <div class="card-header bg-primary text-white">
+                <h3 class="px-3">Current Guest Information</h3>
+            </div>
+            <div class="card-body">
+                 <p><strong>Full Name:</strong> <?= htmlspecialchars($currentGuest->name) ?></p>
+                <p><strong>Contact Number:</strong> <?= htmlspecialchars($currentGuest->contact) ?></p>
+                <p><strong>Check-in:</strong> <?= htmlspecialchars($currentGuest->check_in) ?></p>
+                <p><strong>Check-out:</strong> <?= htmlspecialchars($currentGuest->check_out) ?></p>
+                <p><strong>Number of Guests:</strong> <?= htmlspecialchars($currentGuest->guest_count) ?></p>
+            </div>
+        </div>
+        <?php else: ?>
+        <div class="card shadow">
+            <div class="card-body text-muted">
+                <em>No current guest information available.</em>
+            </div>
+        </div>
+        <?php endif; ?>
             <div class="text-center mt-4">
                 <a href="index.php" class="btn btn-secondary">Back to Room List</a>
             </div>
