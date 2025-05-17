@@ -1,41 +1,67 @@
-.open{
-box-sizing: border-box;
+.open {
+  box-sizing: border-box;
 }
 
-.modal_container{
-background-color:rgb(0,0,0,0.3);
-display: flex;
-align-items: center;
-justify-content: center;
-position:fixed;
-opacity:0;
-pointer-events: none;
-top: 0;
-left: 0;
-height: 100vh;
-width: 100vh;
+.modal_container {
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  opacity: 0;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  transition: opacity 0.3s ease;
 }
 
-.modal_container.show{
-    pointer-events:auto;
-  opacity:1;
+.modal_container.show {
+  pointer-events: auto;
+  opacity: 1;
 }
 
-.modal{
-background-color: #fff;
-border-radius:5px;
-box-shadow: 0 2px 4px rgb(0,0,0,0.2);
-padding: 30px 50px;
-width: auto;
-max-width:100%;  
-text-align:center;
+.modal {
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  width: auto;
+  max-width: 600px;
+  text-align: center;
 }
 
 .modal h1 {
-margin: 0;
+  margin: 0;
+  font-size: 24px;
 }
 
 .modal p {
-font-size:16px;
-opacity: 0.7;
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+.star-rating {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 15px;
+}
+
+.star-rating input {
+  display: none;
+}
+
+.star-rating label {
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.2s;
+  color: #ccc;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color: #00b4b6;
 }
