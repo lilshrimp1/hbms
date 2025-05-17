@@ -194,6 +194,24 @@
             background-color:#1bb3bd !important; 
             color: white !important; 
     }
+
+    .sidebar a {
+    text-decoration: none !important;
+}
+
+            .sidebar ul li a {
+        padding: 12px 20px;
+        text-decoration: none;
+        font-size: 18px;
+        color: white;
+        display: block;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        white-space: nowrap; 
+        overflow: hidden; 
+        text-overflow: ellipsis; 
+    }
     </style>
 </head>
 </body>
