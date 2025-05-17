@@ -97,11 +97,15 @@ $currentGuest = Amenity::getCurrentGuestInfo($id);
             <p><strong>Price:</strong> <?= htmlspecialchars($amenity->price) ?></p>
             <p><strong>Description:</strong> <?= htmlspecialchars($amenity->description) ?></p>
             <p><strong>Status:</strong> <?= htmlspecialchars($amenity->status) ?></p>
-
             <hr>
-
             <h4 class="text-primary">Current Guest Information</h4>
             <?php if ($currentGuest): ?>
+        <?php if ($currentGuest): ?>
+        <div class="card shadow mb-5">
+            <div class="card-header bg-primary text-white">
+                <h3 class="px-3">Current Guest Information</h3>
+            </div>
+            <div class="card-body">
                 <p><strong>Full Name:</strong> <?= htmlspecialchars($currentGuest->name) ?></p>
                 <p><strong>Contact Number:</strong> <?= htmlspecialchars($currentGuest->contact) ?></p>
                 <p><strong>Check-in:</strong> <?= htmlspecialchars($currentGuest->check_in) ?></p>
@@ -110,7 +114,18 @@ $currentGuest = Amenity::getCurrentGuestInfo($id);
             <?php else: ?>
                 <p class="text-muted"><em>No guest is currently using this amenity.</em></p>
             <?php endif; ?>
-
+            </div>
+        </div>
+        <?php else: ?>
+        <div class="card shadow mb-5">
+            <div class="card-header bg-primary text-white">
+                <h3 class="px-3">Current Guest Information</h3>
+            </div>
+            <div class="card-body">
+                <p class="text-muted"><em>No guest is currently using this amenity.</em></p>
+            </div>
+        </div>
+        <?php endif; ?>
                 <div class="row gx-3">
                     <div class="col-12">
         <a href="index.php" class="btn btn-secondary">Back</a>

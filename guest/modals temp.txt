@@ -1,0 +1,100 @@
+HTML
+
+<!-- button from the page -->
+<button class="btn btn-primary" id="open">
+Edit Profile
+</button>
+
+<!-- modal that will pop up -->
+<div class="modal_container" id="modal_container">
+<div class="modal">
+<!-- content here -->
+Hello
+<button id="update">
+Upadte
+</button>
+<button id="close">
+Back
+</button>
+</div>
+
+
+
+CSS 
+
+.open{
+box-sizing: border-box;
+}
+
+body{
+background-color: #####;
+font-family: ####;
+display: flex;
+align-items: center;
+justify-content: center;
+min-height: 100vh;
+margin: 0;
+}
+
+button{
+background-color: green;
+border: 0;
+border-radius: 5px;
+box-shadow: 0 2px 4px rgb(0,0,0,0.2);
+color: #fff;
+padding: 10px , 25px;
+}
+
+.modal_container{
+background-color:rgb(0,0,0,0.3);
+display: flex;
+align-items: center;
+justify-content: center;
+position:fixed;
+opacity:0;
+pointer-events: none;
+top: 0;
+lett: 0;
+height: 100vh;
+width: 100vh;
+}
+
+.modal_container.show{
+    pointer-events:auto;
+  opacity:1;
+}
+.modal{
+background-color: #fff;
+border-radius:5px;
+box-shadow: 0 2px 4px rgb(0,0,0,0.2);
+padding: 30px 50px;
+width: 600px;
+max-width:100%;  
+text-align:center;
+}
+
+.modal h1 {
+margin: 0;
+}
+
+.modal p {
+font-size:16px;
+opacity: 0.7;
+}
+
+
+
+
+JavaScript
+
+const open = document.getElementById('open');
+const modal_container = document.getElementById('modal_container'); // Corrected the ID
+const close = document.getElementById('close');
+
+open.addEventListener('click', () => {
+  modal_container.classList.add('show');
+});
+
+close.addEventListener('click', () => {
+  modal_container.classList.remove('show');
+});

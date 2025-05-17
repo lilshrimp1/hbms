@@ -6,11 +6,12 @@ require '../plugins/fpdf186/fpdf.php';
 $database = new Database();
 $conn = $database->getConnection();
 Amenity::setConnection($conn);
+$amenities = Amenity::all();
 
 $pdf = new FPDF();
 $pdf->AddPage();
 $pdf->SetFont('Arial', 'B', 20);
-$pdf->Cell(0, 10, $reportTitle, 0, 1, 'C');
+$pdf->Cell(0, 10, 'Amenities Report', 0, 1, 'C');
 
 $pdf->Ln(10);
 $pdf->SetFont('Arial', 'B', 12);

@@ -38,6 +38,22 @@ class Amenity extends Model{
         : null; 
     }
 
+
+public static function getCurrentGuestInfo($amenity_id){
+    $result = parent::getCurrentGuestInfo($amenity_id);
+    
+    if ($result) {
+        // Convert associative array to object
+        $guest = new \stdClass();
+        foreach ($result as $key => $value) {
+            $guest->$key = $value;
+        }
+        return $guest;
+    }
+    
+    return null;
+}
+
     public static function findStatus($status){
         $result = parent::findStatus($status);
 

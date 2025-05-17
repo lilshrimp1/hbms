@@ -43,6 +43,23 @@ class Model{
         return $count > 0;
     }
 
+    protected static function getCurrentGuestInfo($amenity_id) {
+        $sql = "SELECT u.name, u.contact_no AS contact, r.check_in, r.check_out, r.guests AS guest_count
+                FROM room_amenities ra
+                JOIN room rm ON ra.room_id = rm.id
+                JOIN reservations r ON r.room_id = rm.id
+                JOIN users u ON r.user_id = u.id
+                WHERE ra.amenity_id = ? 
+                AND r.check_in <= CURRENT_DATE()
+                AND r.check_out >= CURRENT_DATE()
+                AND r.status = 'confirmed'
+                LIMIT 1";
+        $stmt = self::$conn->prepare($sql);
+        $stmt->execute([$amenity_id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ? $row : null;
+    }
+
     protected static function countByStatus($status) {
         try {
             $sql = "SELECT COUNT(*) as count FROM " . static::$table . " WHERE status = ?";
