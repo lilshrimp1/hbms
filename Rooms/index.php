@@ -310,15 +310,17 @@
                 
                 <div class="data-table-container" style="margin-top:180px; position:relative; font-size:15px;">
                 <div style="margin-top:-100px;">
-                    <div class="flex items-right mb-6 justify-end" >
-                        <a href="create.php" class="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style="border-radius: 1rem; 
-                        background-color:#1BB3BD; text-decoration: none;">Add New Room</a>
-                    </div>
+                        <div class="d-flex justify-content-end mb-3 gap-2">
+                            <a href="create.php" class="btn text-white fw-bold" 
+                            style="border-radius: 1rem; background-color:#1BB3BD; text-decoration: none;">
+                                Add Room
+                            </a>
 
-                    <div class="mb-3 text-end">
-                            <a href="fpdf.php" class="btn btn-danger">Export to PDF</a>
+                            <a href="fpdf.php" class="btn btn-danger"style="border-radius: 1rem; text-decoration: none;">
+                                Export to PDF
+                            </a>
                         </div>
-                </div>
+                    </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full">
                         <thead class="bg-white-100">

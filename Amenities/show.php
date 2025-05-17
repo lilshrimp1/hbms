@@ -24,6 +24,17 @@ if (!$amenity) {
 
 $currentGuest = Amenity::getCurrentGuestInfo($id);
 ?>
+<style>
+        .center-page {
+            height: 40vh;
+            display: flex;
+            padding: 350px;
+            margin: 0 auto !important;
+            justify-content: center !important;
+            align-items: center;
+        }
+
+</style>
 
 <?php include '../layout/header.php'; ?>
 <body class="bg" style="background-image:url(../images/bg.png); position:fixed;">
@@ -74,19 +85,21 @@ $currentGuest = Amenity::getCurrentGuestInfo($id);
                 <img src="https://placehold.co/40x40/80ED99/fff?text=U&font=Montserrat" alt="User Avatar" class="rounded-full">
             </div>
         </header>
-
-        <div class="card shadow mb-5">
-            <div class="card-header bg-info text-white">
-                <h2 class="px-3">Amenity Details</h2>
-            </div>
-            <div class="card-body">
-                <p><strong>Name:</strong> <?= htmlspecialchars($amenity->name) ?></p>
-                <p><strong>Price:</strong> <?= htmlspecialchars($amenity->price) ?></p>
-                <p><strong>Description:</strong> <?= htmlspecialchars($amenity->description) ?></p>
-                <p><strong>Status:</strong> <?= htmlspecialchars($amenity->status) ?></p>
-            </div>
+    
+    <div class="center-page">
+    <div class="card shadow mb-5">
+        <div class="card-header" style="background-color:rgb(31, 126, 133); color: white;">
+            <h2 class="px-3">Amenity Details & Guest Information</h2>
         </div>
-
+        <div class="card-body">
+            <h4 class="text-primary">Amenity Details</h4>
+            <p><strong>Name:</strong> <?= htmlspecialchars($amenity->name) ?></p>
+            <p><strong>Price:</strong> <?= htmlspecialchars($amenity->price) ?></p>
+            <p><strong>Description:</strong> <?= htmlspecialchars($amenity->description) ?></p>
+            <p><strong>Status:</strong> <?= htmlspecialchars($amenity->status) ?></p>
+            <hr>
+            <h4 class="text-primary">Current Guest Information</h4>
+            <?php if ($currentGuest): ?>
         <?php if ($currentGuest): ?>
         <div class="card shadow mb-5">
             <div class="card-header bg-primary text-white">
@@ -98,6 +111,9 @@ $currentGuest = Amenity::getCurrentGuestInfo($id);
                 <p><strong>Check-in:</strong> <?= htmlspecialchars($currentGuest->check_in) ?></p>
                 <p><strong>Check-out:</strong> <?= htmlspecialchars($currentGuest->check_out) ?></p>
                 <p><strong>Number of Guests:</strong> <?= htmlspecialchars($currentGuest->guest_count) ?></p>
+            <?php else: ?>
+                <p class="text-muted"><em>No guest is currently using this amenity.</em></p>
+            <?php endif; ?>
             </div>
         </div>
         <?php else: ?>
@@ -110,12 +126,12 @@ $currentGuest = Amenity::getCurrentGuestInfo($id);
             </div>
         </div>
         <?php endif; ?>
-
-        <div class="mt-4">
-            <a href="index.php" class="btn btn-secondary">Back</a>
+                <div class="row gx-3">
+                    <div class="col-12">
+        <a href="index.php" class="btn btn-secondary">Back</a>
+    </div>
         </div>
-    </main>
-</div>
+    </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

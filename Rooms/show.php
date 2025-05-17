@@ -101,9 +101,9 @@ $currentGuest = Room::getCurrentGuestInfo($id);
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             padding: 1.5rem; 
             margin-top: 60px; 
-            margin-left: 300px; 
+            margin-left: 450px; 
             margin-right: auto; 
-            max-width: 95%; 
+            max-width: 2000%; 
         }
 
         .overflow-x-auto {

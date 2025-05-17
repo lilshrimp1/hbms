@@ -114,7 +114,7 @@ $amenities = Amenity::all();
         margin-top: 120px !important;
         width: 100%;
         max-width: 1000px;
-        margin-left: 250px;
+        margin-left: 200px;
     }
 
         .actions-cell {
@@ -123,6 +123,7 @@ $amenities = Amenity::all();
         justify-content: left;
         gap: 2px;
 }
+
 </style>
 <body class="bg" style="background-image:url(../images/bg.png); position:fixed;">
     <div class="flex">
@@ -201,15 +202,19 @@ $amenities = Amenity::all();
                 </header>
 
                 <div class="data-table-container" style="margin-top:180px; position:relative; font-size:15px;">
-                <div style="margin-top:-100px;">
-                    <div class="flex items-right mb-6 justify-end" >
-                        <a href="create.php" class="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style="border-radius: 1rem; 
-                        background-color:#1BB3BD; text-decoration: none;">Add Amenity</a>
-                    </div>
-                
-                    <div class="mb-3 text-end">
-                            <a href="fpdf.php" class="btn btn-danger">Export to PDF</a>
+                    <div style="margin-top:-100px;">
+                        
+                        <div class="d-flex justify-content-end mb-3 gap-2">
+                            <a href="create.php" class="btn text-white fw-bold" 
+                            style="border-radius: 1rem; background-color:#1BB3BD; text-decoration: none;">
+                                Add Amenity
+                            </a>
+
+                            <a href="fpdf.php" class="btn btn-danger"style="border-radius: 1rem; text-decoration: none;">
+                                Export to PDF
+                            </a>
                         </div>
+                    </div>
 
 
         <div class="overflow-x-auto">
@@ -237,7 +242,6 @@ $amenities = Amenity::all();
                             <td><?= $amenity->status ?></td>
                             <td class="actions-cell">
                                 <a href="show.php?id=<?= $amenity->id ?>" class="action-button view-button">View</a>
-                            <td>    
                                 <a href="edit.php?id=<?= $amenity->id ?>" class="action-button edit-button">Edit</a>
                                 <?php if($amenity->status == 'Active'): ?>
                                     <a href="deactivate.php?id=<?= $amenity->id ?>" class="action-button deactivate-button">Deactivate</a>
