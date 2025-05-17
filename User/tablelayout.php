@@ -27,7 +27,7 @@ class ReservationCard {
         echo '</div>';
     }
 
-     protected static function table($id){
+     protected function table($id){
         for($x = 0; $x < $id; $x++){
             $this->render();
         }
