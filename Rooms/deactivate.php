@@ -1,43 +1,28 @@
-<?php session_start(); ?>
+<?php session_start();?>
 <?php include '../layout/header.php'; ?>
+<?php include '../auth/super.php'; ?>
 <?php require_once '../Database/database.php'; 
-      require_once '../models/Amenity.php';
-    $database = new database();
-    $conn = $database->getConnection();
+      require_once '../models/Room.php';
+        $database = new database();
+        $conn = $database->getConnection();
 ?>
 
-
-
 <?php
-
-if(isset($_SESSION['role']) && ($_SESSION['role'] != 'Super Admin' && $_SESSION['role'] != 'Admin')){
-    echo '<script>
-        Swal.fire({
-            title: "Unauthorized!",
-            text: "You do not have permission to delete this Room.",
-            icon: "error",
-            confirmButtonText: "Ok"
-        }).then(() => {
-            window.location = "index.php";
-        });
-    </script>';
-    exit();
-}
-
-Amenity::setConnection($conn);
+Room::setConnection($conn);
 // If deletion is confirmed via POST
 if(isset($_POST['confirm_delete'])) {
-    $id = $_GET['id'];
-    $amenity = Amenity::find($id);
-    $amenity->delete();
 
-    if($amenity){
-        if($amenity){
-            echo '<script>
-                Swal.fire({
-                    title: "Deleted!",
-                    text: "The Amenity has been deleted.",
-                    icon: "success"
+    $id = $_GET['id'];
+
+    $room = Room::find($id);
+    $room->status = 'Inactive';
+
+    if($room->save()){
+        echo '<script>
+            Swal.fire({
+                title: "Deactivated!",
+                text: "The Room has been deactivated.",
+                icon: "success"
                 }).then(() => {
                     window.location = "index.php";
                 });
@@ -46,7 +31,7 @@ if(isset($_POST['confirm_delete'])) {
             echo '<script>
                 Swal.fire({
                     title: "Error!",
-                    text: "Failed to delete amenity record, please try again!",
+                    text: "Failed to Deactivate Room, please try again!",
                     icon: "error",
                     confirmButtonText: "Ok"
                 }).then(() => {
@@ -54,9 +39,7 @@ if(isset($_POST['confirm_delete'])) {
                 });
             </script>';
         }
-    } else {
-        echo "Error preparing statement: " . mysqli_error($conn);
-    }
+    // No extra else here; remove the extra closing brace above
 } else {
     // Show confirmation dialog first
     echo '<script>
@@ -87,7 +70,6 @@ if(isset($_POST['confirm_delete'])) {
         });
     </script>';
 }
-
 ?>
 
 <?php include '../layout/footer.php'; ?>

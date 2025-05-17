@@ -36,14 +36,22 @@
                                 <span class="icon"><i class="fa fa-book"></i></span>
                                 <span class="text">Room Management</span></a>
                         </li>
-                        <?php if(isset($_SESSION['role']) && ($_SESSION['role'] != 'Librarian' && $_SESSION['role'] != 'Admin')){ ?>
+                        <?php if(isset($_SESSION['role']) && ($_SESSION['role'] != 'Front Desk' && $_SESSION['role'] != 'Guest')){ ?>
                         <li><a href="../Amenities/index.php">
                                 <span class="icon"><i class="fa fa-user"></i></span>
                                 <span class="text">Amenities</span></a>
                         </li>
-                        <li><a href="../main/pdf.php">
-                                <span class="icon"><i class="fa fa-file-pdf"></i></span>
-                                <span class="text">PDF</span></a>
+                        <li><a href="../Reservation/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
+                                <span class="text">Reservation</span></a>
+                        </li>
+                        <li><a href="../Review/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
+                                <span class="text">Feedback</span></a>
+                        </li>
+                        <li><a href="../User/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
+                                <span class="text">Manage User</span></a>
                         </li>
                         <li><a href="../auth/logout.php">
                                 <span class="icon"><i class="fa fa-sign-out"></i></span>

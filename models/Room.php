@@ -3,6 +3,7 @@
 require_once 'model.php';
 require_once 'Amenity.php';
 require_once 'RoomType.php';
+require_once 'Reservation.php';
 
 class Room extends Model{
     protected static $table = 'room';
@@ -50,6 +51,28 @@ class Room extends Model{
 
     public static function countByStatus($status) {
         return parent::countByStatus($status);
+    }
+
+
+public static function getCurrentGuestInfo($room_id){
+    $result = parent::getCurrentGuestInfo($room_id);
+
+    if ($result) {
+        // Convert associative array to object
+        $guest = new \stdClass();
+        foreach ($result as $key => $value) {
+            $guest->$key = $value;
+        }
+        return $guest;
+    }
+    
+    return null;
+}
+
+
+    public static function hasPastReservations($room_id) {
+        $model = new parent();
+        return $model->hasPastReservations($room_id);
     }
 
     public static function create(array $data){

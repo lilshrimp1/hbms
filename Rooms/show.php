@@ -13,7 +13,7 @@
 
     $roomType = RoomType::find($room->type_id);
 
-     Amenity::setConnection($conn);
+    Amenity::setConnection($conn);
 
     $amenities = Amenity::find($id);
 
@@ -21,6 +21,8 @@
         show404Error();
         exit();
     }
+
+
 
 // Function to display 404 error
 function show404Error() {
@@ -37,6 +39,8 @@ function show404Error() {
           </div>';
     include '../layout/footer.php';
 }
+
+$currentGuest = Room::getCurrentGuestInfo($id);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -227,10 +231,17 @@ function show404Error() {
                         <li><a href="../Amenities/index.php">
                                 <span class="icon"><i class="fa fa-user"></i></span>
                                 <span class="text">Amenities</span></a>
+                        <li><a href="../Reservation/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
+                                <span class="text">Reservation</span></a>
                         </li>
-                        <li><a href="../main/pdf.php">
-                                <span class="icon"><i class="fa fa-file-pdf"></i></span>
-                                <span class="text">PDF</span></a>
+                        <li><a href="../Review/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
+                                <span class="text">Feedback</span></a>
+                        </li>
+                        <li><a href="../User/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
+                                <span class="text">Manage User</span></a>
                         </li>
                         <li><a href="../auth/logout.php">
                                 <span class="icon"><i class="fa fa-sign-out"></i></span>
@@ -271,7 +282,7 @@ function show404Error() {
 
 <?php if(isset($room)): ?>
     <div class="data-table-container">
-    <div class="card shadow  mx-auto" style="max-height: 700px;">
+    <div class="card shadow  mx-auto" ">
         <div class="card-header bg-danger-subtle">
             <h2 class="text-left text-white px-3">Room Details</h2>
         </div>
@@ -305,6 +316,26 @@ function show404Error() {
                 <strong class="d-block mb-1" style="font-weight: bold; color: #333;">Status:</strong>
                 <span style="color: #555;"><?= $room->status ?></span>
             </div>
+                    <?php if ($currentGuest): ?>
+        <div class="card shadow mb-5">
+            <div class="card-header bg-primary text-white">
+                <h3 class="px-3">Current Guest Information</h3>
+            </div>
+            <div class="card-body">
+                 <p><strong>Full Name:</strong> <?= htmlspecialchars($currentGuest->name) ?></p>
+                <p><strong>Contact Number:</strong> <?= htmlspecialchars($currentGuest->contact) ?></p>
+                <p><strong>Check-in:</strong> <?= htmlspecialchars($currentGuest->check_in) ?></p>
+                <p><strong>Check-out:</strong> <?= htmlspecialchars($currentGuest->check_out) ?></p>
+                <p><strong>Number of Guests:</strong> <?= htmlspecialchars($currentGuest->guest_count) ?></p>
+            </div>
+        </div>
+        <?php else: ?>
+        <div class="card shadow">
+            <div class="card-body text-muted">
+                <em>No current guest information available.</em>
+            </div>
+        </div>
+        <?php endif; ?>
             <div class="text-center mt-4">
                 <a href="index.php" class="btn btn-secondary">Back to Room List</a>
             </div>

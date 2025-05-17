@@ -1,14 +1,13 @@
-<?php 
-require_once '../Database/database.php'; 
+<?php
+require_once '../Database/database.php';
 require_once '../models/Review.php';
-session_start();
-require_once '../models/User.php';
 require_once '../models/Reservation.php';
+require_once '../models/User.php';
+session_start();
 include '../layout/header.php';
-include '../auth/super.php';
+include '../auth/super.php'; 
 
-
-$database = new database();
+$database = new Database();
 $conn = $database->getConnection();
 
 Review::setConnection($conn);
@@ -16,26 +15,19 @@ Reservation::setConnection($conn);
 User::setConnection($conn);
 
 
-// Filter handling
-$rating_filter = isset($_GET['rating']) ? $_GET['rating'] : '';
-$date_filter = isset($_GET['date']) ? $_GET['date'] : '';
-$status_filter = isset($_GET['status']) ? $_GET['status'] : '';
-
-// Only one filter at a time
-if ($rating_filter) {
-    $reviews = Review::where('rating', '=', $rating_filter);
-} elseif ($date_filter) {
-    $reviews = Review::where('created_at', 'LIKE', $date_filter . '%');
-} elseif ($status_filter) {
-    $reviews = Review::where('status', '=', $status_filter);
-} else {
-    $reviews = Review::all();
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    echo "<div class='alert alert-danger'>Review ID is required.</div>";
+    exit;
 }
 
-// Ensure $reviews is always an array
-if (!$reviews) {
-    $reviews = [];
+$review = Review::find($_GET['id']);
+if (!$review) {
+    echo "<div class='alert alert-danger'>Review not found.</div>";
+    exit;
 }
+
+$reservation = Reservation::find($review->reservation_id);
+$user = $reservation ? User::find($reservation->user_id) : null;
 ?>
 
 <!DOCTYPE html>
@@ -96,8 +88,8 @@ if (!$reviews) {
             border-radius: 0.75rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             padding: 1.5rem; 
-            margin-top:70px; 
-            margin-left: 150px; 
+            margin-top: 30px; 
+            margin-left: 500px; 
             margin-right: auto; 
             max-width: 95%; 
         }
@@ -271,7 +263,7 @@ if (!$reviews) {
                                 <span class="icon"><i class="fa fa-book"></i></span>
                                 <span class="text">Room Management</span></a>
                         </li>
-                        <?php if(isset($_SESSION['role']) && ($_SESSION['role'] != 'Librarian' && $_SESSION['role'] != 'Admin')){ ?>
+                        <?php if(isset($_SESSION['role']) && ($_SESSION['role'] != 'Super Admin')){ ?>
                         <li><a href="../Amenities/index.php">
                                 <span class="icon"><i class="fa fa-user"></i></span>
                                 <span class="text">Amenities</span></a>
@@ -326,55 +318,43 @@ if (!$reviews) {
             </header>
 
 <div class="data-table-container">
-    <div class="card shadow">
-        <div class="card-header bg-danger-subtle text-white d-flex justify-content-between">
-            <h2 class="text-left px-3">REVIEWS</h2>
-        </div>
-        
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="reviewsTable" class="table table-striped table-hovered table-bordered mt-4 mb-9">
-                        <tr>
-                            <th style = "text-align: center;">#</th>
-                            <th style = "text-align: center;">Reviewer Name</th>
-                            <th style = "text-align: center;">Rating</th>
-                            <th style = "text-align: center;">Comment</th>
-                            <th style = "text-align: center;">Status</th>
-                            <th style = "text-align: center;">Created At</th>
-                            <th style = "text-align: center;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach($reviews as $review): 
-                            $reservation = Reservation::find($review->reservation_id);
-                            $userResult = User::where('id', '=', $reservation->user_id);
-                            $user = is_array($userResult) && !empty($userResult) ? $userResult[0] : null;
-                            $room = Room::find($reservation->room_id);
-                            ?>
-                            <tr>
-                                <td><?= htmlspecialchars($review->id) ?></td>
-                                <td><?= htmlspecialchars($user->name) ?></td>
-                                <td><?= htmlspecialchars($review->rating) ?></td>
-                                <td><?= htmlspecialchars($review->comment) ?></td>
-                                <td><?= htmlspecialchars($review->status) ?></td>
-                                <td><?= htmlspecialchars($review->created_at) ?></td>
-                                    <td class="text-center">
-                                        <div class="d-flex justify-content-center gap-2">
-                                    <a href="show.php?id=<?= $review->id ?>" class="action-button view-button">View</a>
-                                    <a href="edit.php?id=<?= $review->id ?>" class="action-button edit-button">Edit</a>
-                                    <?php if(isset($_SESSION['role']) && ($_SESSION['role'] == 'Super Admin' || $_SESSION['role'] == 'Admin')): ?>
-                                        <a href="destroy.php?id=<?= $review->id ?>" class="action-button deactivate-button">Delete</a>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+    <div class="card p-4 shadow" style="max-width: 800px; margin: 0 auto;">
+        <h3 class="mb-4 text-center">Edit Review</h3>
+        <form action="update.php" method="POST">
+            <input type="hidden" name="id" value="<?= $review->id ?>">
+
+            <div class="mb-3">
+                <label for="rating" class="form-label">Rating (1-5)</label>
+                <input type="number" class="form-control" name="rating" id="rating" min="1" max="5" value="<?= htmlspecialchars($review->rating) ?>" required>
             </div>
-        </div>
+
+            <div class="mb-3">
+                <label for="comment" class="form-label">Comment</label>
+                <textarea class="form-control" name="comment" id="comment" rows="4"><?= htmlspecialchars($review->comment) ?></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="status" class="form-label">Status</label>
+                <select name="status" id="status" class="form-select">
+                    <option value="active" <?= $review->status === 'active' ? 'selected' : '' ?>>Active</option>
+                    <option value="inactive" <?= $review->status === 'inactive' ? 'selected' : '' ?>>Inactive</option>
+                </select>
+            </div>
+
+            <?php if ($user): ?>
+                <hr>
+                <h5>User Info</h5>
+                <p><strong>Name:</strong> <?= htmlspecialchars($user->name) ?></p>
+                <p><strong>Email:</strong> <?= htmlspecialchars($user->email) ?></p>
+            <?php endif; ?>
+
+            <div class="mt-4 d-flex justify-content-between">
+                <a href="index.php" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Update Review</button>
+            </div>
+        </form>
     </div>
 </div>
-
 
 <script>
         document.addEventListener('DOMContentLoaded', function() {
