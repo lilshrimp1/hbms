@@ -12,9 +12,8 @@ Review::setConnection($conn);
 
 $status = $_GET['status'];
 
-$amenity = Review::find($status);
+$review = Review::find($status);
 
-$amenity->status = $_GET['status'];
 
 $amenity->save();
 

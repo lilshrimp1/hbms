@@ -268,10 +268,7 @@ $user = $reservation ? User::find($reservation->user_id) : null;
                                 <span class="icon"><i class="fa fa-user"></i></span>
                                 <span class="text">Amenities</span></a>
                         </li>
-                        <li><a href="../Reservation/index.php">
-                                <span class="icon"><i class="fa fa-user"></i></span>
-                                <span class="text">Reservation</span></a>
-                        </li>
+                        <?php } ?>
                         <li><a href="../Review/index.php">
                                 <span class="icon"><i class="fa fa-user"></i></span>
                                 <span class="text">Feedback</span></a>
@@ -289,7 +286,6 @@ $user = $reservation ? User::find($reservation->user_id) : null;
                     </div>
                 </nav>
         </aside>
-        <?php } ?>
         <main class="flex-1 p-8">
             <header>
                 <div class="flex">
