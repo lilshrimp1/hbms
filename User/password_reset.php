@@ -7,45 +7,47 @@ include '../layout/header.php';
 
 $database = new database();
 $conn = $database->getConnection();
-
 User::setConnection($conn);
 
 $id = $_GET['id'];
-
 $user = User::find($id);
-$hashedPassword = password_hash($_GET['password'], PASSWORD_DEFAULT);
-$user->password = $hashedPassword;
 
+// Handle POST request
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $newPassword = $_POST['password'] ?? '';
+    $confirmPassword = $_POST['confirm_password'] ?? '';
 
-$user->save();
+    if (strlen($newPassword) < 6) {
+        echo '<script>alert("Password must be at least 6 characters.");</script>';
+    } elseif ($newPassword !== $confirmPassword) {
+        echo '<script>alert("Passwords do not match.");</script>';
+    } else {
+        $user->password = password_hash($newPassword, PASSWORD_DEFAULT);
+        $user->save();
 
-if ($user) {
-    echo '<script>
-            Swal.fire({
-                title: "Success!",
-                text: "Password has been updated.",
-                icon: "success",
-                confirmButtonText: "Ok"
-            }).then(function() {
-                window.location = "index.php";
-            });
-        </script>';
-} else {
         echo '<script>
-                Swal.fire({
-                    title: "Error!",
-                    text: "Failed to update Password.",
-                    icon: "error",
-                    confirmButtonText: "Ok"
-                }).then(function() {
-                    window.location = "edit.php?id=' . $id . '";
-                });
-            </script>';
+            alert("Password updated successfully.");
+            window.location.href = "index.php";
+        </script>';
     }
-
-
-
-
+}
 ?>
 
-<?php include '../layout/footer.php';?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reset Password</title>
+</head>
+<body>
+    <form method="POST">
+        <h2>Reset Password for <?php echo htmlspecialchars($user->name); ?></h2>
+        <label>New Password:</label><br>
+        <input type="password" name="password" required><br><br>
+
+        <label>Confirm Password:</label><br>
+        <input type="password" name="confirm_password" required><br><br>
+
+        <button type="submit">Reset Password</button>
+    </form>
+</body>
+</html>

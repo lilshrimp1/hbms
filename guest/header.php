@@ -1,8 +1,6 @@
 <?php 
-include '../layout/modals/modals.php';
-<<<<<<< HEAD
-=======
 require_once '../Database/database.php';
+require_once '../layout/modals/modals.php';
 require_once '../models/User.php';
 
 $database = new database();
@@ -10,7 +8,6 @@ $conn = $database->getConnection();
 session_start();
 User::setConnection($conn);
 $user = User::find($_SESSION['user_id']);
->>>>>>> parent of 7096320 (Merge pull request #11 from NemMos16/main)
 
 ?>
 <?php 
@@ -46,7 +43,7 @@ $modals = new Modals();
         <li class="nav-item" style="margin-right:100px;"><a class="nav-link fw-semibold" href="accommodation.php">Accommodation</a></li>
         <li class="nav-item" style="margin-right:450px;"><a class="nav-link fw-semibold" href="profile.php">Manage Profile</a></li>
         <li class="nav-item">
-          <a class="nav-link" href="#" style="margin-right: 100px;"><i class="bi bi-person-circle"></i> Moses Alfonso</a>
+          <a class="nav-link" href="#" style="margin-right: 100px;"><i class="bi bi-person-circle"></i> <?php echo $user->name; ?></a>
         </li>
       </ul>
     </div>

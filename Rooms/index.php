@@ -12,6 +12,7 @@
     $rooms = Room::all();
 
     RoomType::setConnection($conn);
+    
 ?>
 
 <!DOCTYPE html>
