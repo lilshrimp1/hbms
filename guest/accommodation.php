@@ -1,9 +1,5 @@
 <?php
 include 'header.php';
-require_once '../Database/database.php';
-require_once '../models/Reservation.php';
-require_once '../models/RoomType.php';
-require_once '../models/Room.php';
 
 $database = new database();
 $conn = $database->getConnection();
@@ -13,6 +9,8 @@ RoomType::setConnection($conn);
 Room::setConnection($conn);
 $reservations = Reservation::findByColumn('user_id', $_SESSION['user_id']);
 ?>
+
+
 
 <head>
     <meta charset="UTF-8" />

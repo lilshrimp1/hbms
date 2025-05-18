@@ -1,9 +1,6 @@
 <?php
 include 'header.php';
-require_once '../Database/database.php';
-require_once '../models/Reservation.php';
-require_once '../models/RoomType.php';
-require_once '../models/Room.php';
+
 
 $database = new database();
 $conn = $database->getConnection();
@@ -18,6 +15,19 @@ $modals = new Modals();
 
 // Fetch available rooms
 $allAvailableRooms = $guest->getAvailableRooms();
+
+// After fetching $allAvailableRooms
+foreach ($allAvailableRooms as &$room) {
+    if (empty($room['room_type_name']) && !empty($room['type_id'])) {
+        $stmt = $conn->prepare("SELECT name FROM room_types WHERE id = ?");
+        $stmt->execute([$room['type_id']]);
+        $typeRow = $stmt->fetch(PDO::FETCH_ASSOC);
+        $room['room_type_name'] = $typeRow ? $typeRow['name'] : 'Unknown';
+    }
+    $room['image_path'] = ImagePaths::getRoomTypeImage($room['room_type_name']);
+}
+unset($room); // break reference
+
 $totalAvailableRooms = count($allAvailableRooms);
 $initialDisplayCount = min(3, $totalAvailableRooms);
 $displayedRooms = array_slice($allAvailableRooms, 0, $initialDisplayCount);
@@ -34,19 +44,8 @@ foreach ($allBookingHistoryDetails as $detail) {
     $bookingDetailsLookup[$detail['reservation_id']] = $detail;
 }
 
-// Example of using the Guest class
-if (isset($_SESSION['user_id'])) {
-    $userId = $_SESSION['user_id'];
-    $guestDetails = $guest->getGuestDetails($userId);
-    if ($guestDetails) {
-        $guestName = $guestDetails['name'];
-        echo "<p>Welcome, $guestName!</p>";
-    } else {
-        echo "<p>Guest details not found.</p>";
-    }
-}
-
 ?>
+
 <div class="textcenter">
     <div class="overlay"></div>
     <h1 class="welcome">WELCOME</h1>
@@ -70,29 +69,36 @@ if (isset($_SESSION['user_id'])) {
                 </div>
                 <div class="upcoming-booking-details">
                     <h2>Two Bedroom</h2>
+                    
                     <p>Room ID: 101</p>
                     <p>Check-in Date: 05/05/2025</p>
                     <p>Check-out Date: 07/05/2025</p>
                     <p>Amenity: TV, AC</p>
                     <p>Number of Guests: 2</p>
                     <p>Status: Confirmed</p>
+                    
                 </div>
             </div>
             <button class="navigation-button right-arrow">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                      class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
                     <path
-                        d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
+                        d="M8 0a8 8 0 1 1 0 16A8 8 0 1 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
                 </svg>
             </button>
             <div class="dashboard-summary">
                 <div>
                     <p>Total of Upcoming Booking:</p>
-                    <span class="summary-value">5</span>
+                    <span class="number">5</span>
                 </div>
                 <div>
-                    <p>Total Amount:</p>
-                    <span class="summary-value">RM. 250</span>
+                    <p>Total Booking:</p>
+                    <span class="number">12</span>
+                </div>
+                <br>
+                <div>
+                    <p>Total of Available Rooms:</p>
+                    <span class="number">22</span>
                 </div>
             </div>
         </div>
@@ -104,16 +110,16 @@ if (isset($_SESSION['user_id'])) {
         <h3>Available rooms</h3>
         <div class="room-container" id="available-rooms-container">
             <?php foreach ($displayedRooms as $room): ?>
+                <?php
+                    $imagePath = $room['image_path'];
+                ?>
                 <div class="room-card">
-                    <?php
-                    $imagePath = ImagePaths::getRoomTypeImage($room['room_type_name']);
-                    if (!empty($imagePath)):
-                        ?>
-                        <img src="<?php echo $imagePath; ?>" alt="<?php echo $room['room_type_name']; ?>">
+                    <?php if (!empty($imagePath)): ?>
+                        <img src="<?php echo $imagePath; ?>" alt="<?php echo htmlspecialchars($room['room_type_name']); ?>">
                     <?php endif; ?>
                     <div class="card-body">
-                        <h5><?php echo $room['room_type_name']; ?> (Room <?php echo $room['room_number']; ?>)</h5>
-                        <p><?php echo $room['description']; ?></p>
+                        <h5><?php echo htmlspecialchars($room['room_type_name']); ?> (Room <?php echo htmlspecialchars($room['room_number']); ?>)</h5>
+                        <p><?php echo htmlspecialchars($room['description']); ?></p>
                         <button class="btn btn-info view-details-btn" data-room-id="<?php echo $room['id']; ?>"
                                 data-toggle="modal" data-target="#roomDetailsModal">View Details
                         </button>
@@ -132,8 +138,7 @@ if (isset($_SESSION['user_id'])) {
         <?php endif; ?>
     </div>
 
-    <div class="booking-history-section"
-         style="margin-top: 20px; margin-bottom: 20px; margin-left: 200px; display: inline-block; vertical-align: top;">
+    <div class="booking-history-section" style="margin-top: 20px; margin-bottom: 20px; margin-left: 200px; display: inline-block; vertical-align: top;">
         <h3>Booking history</h3>
         <div class="booking-search">
             <input type="text" id="booking-search-input" placeholder="Date/Room">
@@ -142,8 +147,7 @@ if (isset($_SESSION['user_id'])) {
         <ul class="booking-list" id="booking-history-list">
             <?php if (!empty($allBookingHistoryList)): ?>
                 <?php foreach ($allBookingHistoryList as $booking): ?>
-                    <li class="booking-item" data-reservation-id="<?php echo $booking['reservation_id']; ?>"
-                        style="cursor: pointer;">
+                    <li class="booking-item" data-reservation-id="<?php echo $booking['reservation_id']; ?>" style="cursor: pointer;">
                         <?php echo $booking['room_type_name']; ?> (Room <?php echo $booking['room_number']; ?>)
                         <span><?php echo date('m/d/Y', strtotime($booking['check_in'])); ?></span>
                         -
@@ -155,6 +159,7 @@ if (isset($_SESSION['user_id'])) {
             <?php endif; ?>
         </ul>
     </div>
+
     <?php
     // Modal for displaying room details
     echo $modals::layout('roomDetails', 'Room Details', ['<div id="modal-room-details"></div>']);
@@ -277,19 +282,18 @@ if (isset($_SESSION['user_id'])) {
     const nextButton = document.getElementById('next-room');
 
     function displayRooms(rooms) {
-        roomContainer.innerHTML = ''; // Clear current content
+        roomContainer.innerHTML = '';
         rooms.forEach(room => {
             const roomCard = document.createElement('div');
             roomCard.className = 'room-card';
-            const imagePath = ImagePaths.getRoomTypeImage(room.room_type_name);
             roomCard.innerHTML = `
-                    ${imagePath ? `<img src="${imagePath}" alt="${room.room_type_name}">` : ''}
-                    <div class="card-body">
-                        <h5>${room.room_type_name} (Room ${room.room_number})</h5>
-                        <p>${room.description}</p>
-                        <button class="btn btn-info view-details-btn" data-room-id="${room.room_id}" data-toggle="modal" data-target="#roomDetailsModal">View Details</button>
-                    </div>
-                `;
+                ${room.image_path ? `<img src="${room.image_path}" alt="${room.room_type_name}">` : ''}
+                <div class="card-body">
+                    <h5>${room.room_type_name} (Room ${room.room_number})</h5>
+                    <p>${room.description}</p>
+                    <button class="btn btn-info view-details-btn" data-room-id="${room.id}" data-toggle="modal" data-target="#roomDetailsModal">View Details</button>
+                </div>
+            `;
             roomContainer.appendChild(roomCard);
         });
         // Re-attach event listeners to the "View Details" buttons
