@@ -1,11 +1,10 @@
 <?php
 session_start();
 
-<<<<<<< HEAD
 // Check if user is logged in
 if (!isset($_SESSION['email'])) {
-    header("Location: ../auth/login.php");
-    exit();
+header("Location: ../auth/login.php");
+exit();
 }
 
 require_once '../Database/database.php';
@@ -22,21 +21,21 @@ Reservation::setConnection($conn);
 
 // Abstract Dashboard class
 abstract class Dashboard {
-    protected $conn;
-    protected $userRole;
-    protected $userId;
-    protected $today;
-    protected $data = [];
+protected $conn;
+protected $userRole;
+protected $userId;
+protected $today;
+protected $data = [];
 
-    public function __construct($conn, $userRole, $userId) {
-        $this->conn = $conn;
-        $this->userRole = $userRole;
-        $this->userId = $userId;
-        $this->today = date('Y-m-d');
-        $this->fetchCommonData();
-    }
+public function __construct($conn, $userRole, $userId) {
+	$this->conn = $conn;
+	$this->userRole = $userRole;
+	$this->userId = $userId;
+	$this->today = date('Y-m-d');
+	$this->fetchCommonData();
+}
 
-    protected function fetchCommonData() {
+  protected function fetchCommonData() {
         // Room availability stats
         $this->data['available_rooms'] = Room::countByStatus('available');
         $this->data['booked_rooms'] = Room::countByStatus('booked');
