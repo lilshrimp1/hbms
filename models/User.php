@@ -80,6 +80,8 @@ class User extends Model{
     }
 
     public function save() {
+    if (isset($this->id) && !empty($this->id)) {
+        // If user has id, update existing user
         $sql = "UPDATE users SET 
                     name = :name, 
                     email = :email, 
@@ -104,7 +106,34 @@ class User extends Model{
             ':address' => $this->address,
             ':id' => $this->id
         ]);
+    } else {
+        // No id yet — insert new user
+        $sql = "INSERT INTO users 
+                (name, email, password, role, status, created_at, updated_at, contact_no, address)
+                VALUES 
+                (:name, :email, :password, :role, :status, :created_at, :updated_at, :contact_no, :address)";
+        $stmt = self::$conn->prepare($sql);
+        $result = $stmt->execute([
+            ':name' => $this->name,
+            ':email' => $this->email,
+            ':password' => $this->password,
+            ':role' => $this->role,
+            ':status' => $this->status,
+            ':created_at' => $this->created_at,
+            ':updated_at' => $this->updated_at,
+            ':contact_no' => $this->contact_no,
+            ':address' => $this->address
+        ]);
+
+        if ($result) {
+            // Assign the new ID to the object
+            $this->id = self::$conn->lastInsertId();
+        }
+
+        return $result;
     }
+}
+
 
     public function delete(){
         $result = parent::deleteById($this->id);
