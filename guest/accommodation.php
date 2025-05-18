@@ -1,5 +1,17 @@
 <?php
 include 'header.php';
+require_once '../Database/database.php';
+require_once '../models/Reservation.php';
+require_once '../models/RoomType.php';
+require_once '../models/Room.php';
+
+$database = new database();
+$conn = $database->getConnection();
+
+Reservation::setConnection($conn);
+RoomType::setConnection($conn);
+Room::setConnection($conn);
+$reservations = Reservation::findByColumn('user_id', $_SESSION['user_id']);
 ?>
 
 <head>
@@ -202,11 +214,15 @@ include 'header.php';
             </tr>
         </thead>
         <tbody>
+            <?php foreach ($reservations as $reservation): 
+                $rooms = Room::find($reservation->room_id);
+                $room_types = RoomType::find($rooms->type_id);
+                ?>
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td><?php echo $reservation->room_id; ?></td>
+                <td><?php echo $room_types->name; ?></td>
+                <td><?php echo $reservation->check_in; ?></td>
+                <td><?php echo $reservation->status; ?></td>
                 <td class="action-icons">
                   <!--more-->
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
@@ -226,6 +242,7 @@ include 'header.php';
                   </svg>
                   </td>
             </tr>
+            <?php endforeach; ?>
         </tbody>
     </table>
 </div>
