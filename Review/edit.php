@@ -163,23 +163,23 @@ try {
     <div class="card p-4 shadow" style="max-width: 800px; margin: 0 auto;">
         <h3 class="mb-4 text-center">Edit Review</h3>
         <form action="update.php" method="POST">
-            <input type="hidden" name="id" value="<?= $review->id ?>">
+             <input type="hidden" name="id" value="<?= htmlspecialchars($review['id']) ?>">
 
             <div class="mb-3">
                 <label for="rating" class="form-label">Rating (1-5)</label>
-                <input type="number" class="form-control" name="rating" id="rating" min="1" max="5" value="<?= htmlspecialchars($review->rating) ?>" required>
+                <input type="number" class="form-control" name="rating" id="rating" min="1" max="5" value="<?= htmlspecialchars($review['rating']) ?>" required>
             </div>
 
             <div class="mb-3">
                 <label for="comment" class="form-label">Comment</label>
-                <textarea class="form-control" name="comment" id="comment" rows="4"><?= htmlspecialchars($review->comment) ?></textarea>
+                <textarea class="form-control" name="comment" id="comment" rows="4"><?= htmlspecialchars($review['comment']) ?></textarea>
             </div>
 
             <div class="mb-3">
                 <label for="status" class="form-label">Status</label>
                 <select name="status" id="status" class="form-select">
-                    <option value="active" <?= $review->status === 'active' ? 'selected' : '' ?>>Active</option>
-                    <option value="inactive" <?= $review->status === 'inactive' ? 'selected' : '' ?>>Inactive</option>
+                    <option value="active" <?= $review['status'] === 'active' ? 'selected' : '' ?>>Active</option>
+                    <option value="inactive" <?= $review['status'] === 'inactive' ? 'selected' : '' ?>>Inactive</option>
                 </select>
             </div>
 

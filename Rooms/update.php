@@ -20,7 +20,7 @@ $room->capacity = $_GET['capacity'];
 
 $room->save();
 
-if ($room) {
+
     if ($room) {
         echo '<script>
                 document.addEventListener("DOMContentLoaded", function() {
@@ -47,7 +47,7 @@ if ($room) {
                 });
             </script>';
     }
-}
+
 
 ?>
 

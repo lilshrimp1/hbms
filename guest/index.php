@@ -44,6 +44,28 @@ foreach ($allBookingHistoryDetails as $detail) {
     $bookingDetailsLookup[$detail['reservation_id']] = $detail;
 }
 
+// Feedback submission logic
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_feedback'])) {
+    $user_id = $_SESSION['user_id'] ?? null;
+    $rating = isset($_POST['rating']) ? (int)$_POST['rating'] : 0;
+    $comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
+
+    if ($user_id && $rating > 0 && !empty($comment)) {
+        // Find latest reservation for this user
+        $stmt = $conn->prepare("SELECT id FROM reservations WHERE user_id = ? ORDER BY created_at DESC LIMIT 1");
+        $stmt->execute([$user_id]);
+        $reservation = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($reservation) {
+            $reservation_id = $reservation['id'];
+            $stmt = $conn->prepare("INSERT INTO reviews (reservation_id, rating, comment, status, created_at) VALUES (?, ?, ?, 'pending', NOW())");
+            $stmt->execute([$reservation_id, $rating, $comment]);
+        }
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit;
+    }
+}
+
 ?>
 
 <div class="textcenter">
