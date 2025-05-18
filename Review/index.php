@@ -248,7 +248,7 @@ if (!$reviews) {
 </style>
 </head>
 
-<body class="bg" style="background-image:url(../images/bg.png); position:fixed;">
+<body class="bg" style="background-image:url(../images/bg.png); position:fixed; margin-left: 40px;">
     <div class="flex">
         <aside id="navbar" class=" text-blue-800 w-64" style="font-size: 20px; background-color: rgba(75, 216, 226, 0.75);">
 
