@@ -1,6 +1,6 @@
 <?php
 include 'header.php';
-require '../Database/database.php';
+
 
 $db = new database();
 $conn = $db->getConnection();
@@ -64,22 +64,32 @@ foreach ($allBookingHistoryDetails as $detail) {
 
 <div class="dashboard-container">
     <div class="dashboard-card">
-        <h3>Upcoming Booking</h3>
+        <h3 style="margin-left: 30px;">Upcoming Booking</h3>
         <div class="upcoming-booking-wrapper">
+            <button class="navigation-button left-arrow">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1h-5.793l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"/>
+                </svg>
+            </button>
+            <div class="upcoming-booking-visual">
             <div class="upcoming-booking-image-container">
                 <img src="../images/single_bedroom.jpeg" alt="Upcoming Booking Room">
+                </div>
                 <div class="upcoming-booking-details">
                     <h2>Two Bedroom</h2>
-                    
                         <p>Room ID: 101</p>
                         <p>Check-in Date: 05/05/2025</p>
                         <p>Check-out Date: 07/05/2025</p>
                         <p>Amenity: TV, AC</p>
                         <p>Number of Guests: 2</p>
                         <p>Status: Confirmed</p>
-                    
                 </div>
             </div>
+            <button class="navigation-button right-arrow">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+                    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
+                </svg>
+            </button>
             <div class="dashboard-summary">
                 <div>
                     <p>Total of Upcoming Booking:</p>
@@ -160,7 +170,9 @@ foreach ($allBookingHistoryDetails as $detail) {
 </div>
 
 <div style="text-align: center; margin-top: 30px;">
-    <button class="btn btn-success btn-lg" style="background-color: #00cfff; border: none;">BOOK NOW!</button>
+    <a href="accommodation.php" style="text-decoration: none;">
+        <button class="btn btn-success btn-lg" style="background-color: #00cfff; border: none; cursor: pointer;">BOOK NOW!</button>
+    </a>
 </div>
 
 <script>
