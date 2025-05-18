@@ -17,7 +17,7 @@ header h1 {
 }
 
 .textcenter {
-    background-image: url('/HOTEL-BOOKING-MANAGEMENT-SYSTEM/photos/bgimg.jpeg');
+    background-image: url('../images/bgimg.jpeg');
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
@@ -263,13 +263,6 @@ header h1 {
     color: rgba(0, 0, 0, 0.7);
 }
 
-.left-arrow {
-    /* Position to the left of the visual */
-}
-
-.right-arrow {
-    /* Position to the right of the visual */
-}
 
 .lastpage {
     display: flex;
