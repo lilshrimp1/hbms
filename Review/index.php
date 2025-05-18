@@ -284,10 +284,6 @@ if (!$reviews) {
                                 <span class="icon"><i class="fa fa-file-pdf"></i></span>
                                 <span class="text">Reservation</span></a>
                         </li>
-                        <li><a href="../main/pdf.php">
-                                <span class="icon"><i class="fa fa-file-pdf"></i></span>
-                                <span class="text">PDF</span></a>
-                        </li>
                         <li><a href="../auth/logout.php">
                                 <span class="icon"><i class="fa fa-sign-out"></i></span>
                                 <span class="text">Logout</span></a>
@@ -389,3 +385,4 @@ if (!$reviews) {
         });
     </script>
 </body>
+

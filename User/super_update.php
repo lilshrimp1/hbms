@@ -18,8 +18,6 @@ $user->name = $_GET['name'];
 $user->email = $_GET['email'];
 $user->role = $_GET['role'];
 $user->status = $_GET['status'];
-$user->contact_no = $_GET['contact_no'];
-$user->address = $_GET['address'];
 $user->update($_GET['update']);
 
 $user->save();

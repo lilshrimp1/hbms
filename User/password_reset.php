@@ -49,6 +49,7 @@ if ($user->save()) {
     ]);
 }
 
+?>
 <?php 
 session_start();
 require_once '../Database/database.php';
