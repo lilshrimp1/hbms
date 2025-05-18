@@ -1,14 +1,60 @@
 <?php
 include 'header.php';
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reservation_id'])) {
+    // Process edit reservation form submission
+    $reservation_id = $_POST['reservation_id'] ?? null;
+    $room_type_id = $_POST['roomType'] ?? null;
+    $room_number = $_POST['roomNumber'] ?? null;
+    $check_in = $_POST['checkInDate'] ?? null;
+    $check_out = $_POST['checkOutDate'] ?? null;
+    $guests = $_POST['guests'] ?? null;
+    $status = $_POST['status'] ?? null;
+
+    if ($reservation_id && $room_type_id && $room_number && $check_in && $check_out && $guests && $status) {
+        $database = new database();
+        $conn = $database->getConnection();
+        Model::setConnection($conn);
+        Reservation::setConnection($conn);
+
+        // Fetch the reservation to update
+        $reservation = Reservation::find($reservation_id);
+        if ($reservation) {
+            // Update fields
+            $reservation['room_type_id'] = $room_type_id;
+            $reservation['room_number'] = $room_number;
+            $reservation['check_in'] = $check_in;
+            $reservation['check_out'] = $check_out;
+            $reservation['guests'] = $guests;
+            $reservation['status'] = $status;
+
+            // Save update
+            $updated = $reservation->save();
+
+            if ($updated) {
+                $_SESSION['success_message'] = "Reservation updated successfully.";
+            } else {
+                $_SESSION['error_message'] = "Failed to update reservation.";
+            }
+        } else {
+            $_SESSION['error_message'] = "Reservation not found.";
+        }
+    } else {
+        $_SESSION['error_message'] = "Invalid form data.";
+    }
+    // Redirect to accommodation.php to show updated reservation summary
+    header("Location: accommodation.php");
+    exit;
+}
 
 $database = new database();
 $conn = $database->getConnection();
+Model::setConnection($conn);
 
 Reservation::setConnection($conn);
 RoomType::setConnection($conn);
 Room::setConnection($conn);
-$reservations = Reservation::findByColumn('user_id', $_SESSION['user_id']);
+$reservations = Reservation::where('user_id', '=', $_SESSION['user_id']);
 
 // Instantiate Modals here
 $modals = new Modals();
@@ -74,6 +120,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_feedback'])) {
     <h2 class="subtext">LET'S BOOK NOW</h2>
 </div>
 
+<?php
+
+$upcomingBooking = Dashboard::getUpcomingBooking();
+$totalUpcomingBookings = Dashboard::getTotalUpcomingBookings();
+$totalBookings = Dashboard::getTotalBookings();
+$totalAvailableRooms = Dashboard::getTotalAvailableRooms();
+
+if ($upcomingBooking) {
+    $amenities = $upcomingBooking['amenities'] ? explode(',', $upcomingBooking['amenities']) : [];
+}
+?>
+
 <div class="dashboard-container">
     <div class="dashboard-card">
         <h3 style="margin-left: 30px;">Upcoming Booking</h3>
@@ -89,17 +147,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_feedback'])) {
                 <div class="upcoming-booking-image-container">
                     <img src="../images/single_bedroom.jpeg" alt="Upcoming Booking Room">
                 </div>
-                <div class="upcoming-booking-details">
-                    <h2>Two Bedroom</h2>
-                    
-                    <p>Room ID: 101</p>
-                    <p>Check-in Date: 05/05/2025</p>
-                    <p>Check-out Date: 07/05/2025</p>
-                    <p>Amenity: TV, AC</p>
-                    <p>Number of Guests: 2</p>
-                    <p>Status: Confirmed</p>
-                    
-                </div>
+                <?php if ($upcomingBooking): ?>
+                    <div class="upcoming-booking-details">
+                        <h2><?= htmlspecialchars($upcomingBooking['type_name']) ?></h2>
+                        <p>Room ID: <?= htmlspecialchars($upcomingBooking['room_number']) ?></p>
+                        <p>Check-in Date: <?= htmlspecialchars($upcomingBooking['check_in']) ?></p>
+                        <p>Check-out Date: <?= htmlspecialchars($upcomingBooking['check_out']) ?></p>
+                        <p>
+                            Amenities:
+                            <?php if (!empty($amenities)): ?>
+                                <?= htmlspecialchars(implode(', ', $amenities)) ?>
+                            <?php else: ?>
+                                No Amenities
+                            <?php endif; ?>
+                        </p>
+                        <p>Number of Guests: <?= htmlspecialchars($upcomingBooking['guests']) ?></p>
+                        <p>Status: <?= htmlspecialchars($upcomingBooking['status']) ?></p>
+                    </div>
+                <?php else: ?>
+                    <div class="upcoming-booking-details">
+                        <p>No upcoming bookings.</p>
+                    </div>
+                <?php endif; ?>
             </div>
             <button class="navigation-button right-arrow">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -111,16 +180,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_feedback'])) {
             <div class="dashboard-summary">
                 <div>
                     <p>Total of Upcoming Booking:</p>
-                    <span class="number">5</span>
+                    <span class="number"><?= htmlspecialchars($totalUpcomingBookings) ?></span>
                 </div>
                 <div>
                     <p>Total Booking:</p>
-                    <span class="number">12</span>
+                    <span class="number"><?= htmlspecialchars($totalBookings) ?></span>
                 </div>
                 <br>
                 <div>
                     <p>Total of Available Rooms:</p>
-                    <span class="number">22</span>
+                    <span class="number"><?= htmlspecialchars($totalAvailableRooms) ?></span>
                 </div>
             </div>
         </div>
@@ -142,8 +211,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_feedback'])) {
                     <div class="card-body">
                         <h5><?php echo htmlspecialchars($room['room_type_name']); ?> (Room <?php echo htmlspecialchars($room['room_number']); ?>)</h5>
                         <p><?php echo htmlspecialchars($room['description']); ?></p>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#bookRoomModal" style="text-decoration: none;"
+                        onclick="openRoomModal('<?php echo $room['id']; ?>', 'Premium luxury with elegant design and full amenities.', '../images/suite.png')">Details</a>
                         <button class="btn btn-info view-details-btn" data-room-id="<?php echo $room['id']; ?>"
-                                data-toggle="modal" data-target="#roomDetailsModal">View Details
+                                 data-bs-toggle="modal" data-bs-target="#bookRoomModal">View Details
                         </button>
                     </div>
                 </div>
@@ -181,12 +252,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_feedback'])) {
             <?php endif; ?>
         </ul>
     </div>
+   <?php
+    echo Modals::layout('bookRoom');
 
-    <?php
-    // Modal for displaying room details
-    echo $modals::layout('roomDetails', 'Room Details', ['<div id="modal-room-details"></div>']);
+    // Render edit reservation modal with empty data initially
+    echo Modals::layout('editReservation', []);
+
     ?>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Existing JS code...
+
+    // Add click event listener to booking history list items to open edit reservation modal
+    const bookingHistoryList = document.getElementById('booking-history-list');
+    bookingHistoryList.addEventListener('click', function(event) {
+        const listItem = event.target.closest('.booking-item');
+        if (!listItem) return;
+
+        const reservationId = listItem.dataset.reservationId;
+        if (!reservationId) return;
+
+        // Find reservation data from bookingDetailsLookupJS
+        const reservationData = bookingDetailsLookupJS[reservationId];
+        if (!reservationData) {
+            alert('Reservation details not found.');
+            return;
+        }
+
+        // Populate the edit reservation modal form fields
+        const modal = new bootstrap.Modal(document.getElementById('editReservationModal'));
+        const form = document.getElementById('editReservationForm');
+        if (!form) return;
+
+        form.reservation_id.value = reservationData.reservation_id || '';
+        form.roomType.value = reservationData.type_id || '';
+        form.roomNumber.value = reservationData.room_number || '';
+        form.checkInDate.value = reservationData.check_in ? reservationData.check_in.split(' ')[0] : '';
+        form.checkOutDate.value = reservationData.check_out ? reservationData.check_out.split(' ')[0] : '';
+        form.guests.value = reservationData.guests || '';
+        form.status.value = reservationData.reservation_status || '';
+
+        modal.show();
+    });
+});
+</script>
 
 <div style="text-align: center; margin-top: 30px;">
     <a href="accommodation.php" style="text-decoration: none;">
@@ -197,47 +307,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_feedback'])) {
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function () {
     // Make the PHP arrays available to JavaScript
     const bookingDetailsLookupJS = <?php echo json_encode($bookingDetailsLookup); ?>;
     const allBookingHistoryListJS = <?php echo json_encode($allBookingHistoryList); ?>;
     const allRooms = <?php echo json_encode($allAvailableRooms); ?>; // Make allRooms available
 
     // Get references to the modal and its elements
-    const roomDetailsModal = document.getElementById('roomDetailsModal');
-    const modalRoomDetails = document.getElementById('modal-room-details');
+    // Remove old roomDetailsModal references and functions
+    const bookRoomModal = document.getElementById('bookRoomModal');
 
-    const viewDetailsButtons = document.querySelectorAll('.view-details-btn');
-    viewDetailsButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const roomId = this.dataset.roomId;
-            fetchRoomDetails(roomId);
+    function attachViewDetailsListeners() {
+        const viewDetailsButtons = document.querySelectorAll('.view-details-btn');
+        viewDetailsButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const roomId = this.dataset.roomId;
+                // Pre-select room type in booking form
+                const roomTypeSelect = document.getElementById('roomType');
+                if (roomTypeSelect) {
+                    // Find the option with matching room id or name
+                    for (let i = 0; i < roomTypeSelect.options.length; i++) {
+                        if (roomTypeSelect.options[i].value == roomId) {
+                            roomTypeSelect.selectedIndex = i;
+                            break;
+                        }
+                    }
+                    // Trigger change event to update image
+                    roomTypeSelect.dispatchEvent(new Event('change'));
+                }
+                // Show the booking modal
+                if (bookRoomModal) {
+                    var modal = new bootstrap.Modal(bookRoomModal);
+                    modal.show();
+                }
+            });
         });
-    });
-
-    async function fetchRoomDetails(roomId) {
-        try {
-            const response = await fetch(`get_room_details.php?id=${roomId}`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            displayRoomDetailsInModal(data);
-        } catch (error) {
-            console.error("Could not fetch room details:", error);
-            modalRoomDetails.innerHTML = '<p>Error loading details.</p>';
-        }
     }
 
-    function displayRoomDetailsInModal(details) {
-        modalRoomDetails.innerHTML = `
-            <h3>${details.room_type_name} (Room ${details.room_number})</h3>
-            <p>Description: ${details.description}</p>
-            <p>Price: $${details.price}</p>
-            <p>Capacity: ${details.capacity} guests</p>
-            <p>Status: ${details.status}</p>
-            `;
-        // Bootstrap will handle showing the modal because of the data-toggle and data-target attributes on the button.
-    }
+    attachViewDetailsListeners();
 
     // --- JavaScript for Booking History ---
     const bookingHistoryList = document.getElementById('booking-history-list');
@@ -313,19 +420,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_feedback'])) {
                 <div class="card-body">
                     <h5>${room.room_type_name} (Room ${room.room_number})</h5>
                     <p>${room.description}</p>
-                    <button class="btn btn-info view-details-btn" data-room-id="${room.id}" data-toggle="modal" data-target="#roomDetailsModal">View Details</button>
+                    <button class="btn btn-info view-details-btn" data-room-id="${room.id}" data-toggle="modal" data-target="#bookRoomModal">Book Room</button>
                 </div>
             `;
             roomContainer.appendChild(roomCard);
         });
         // Re-attach event listeners to the "View Details" buttons
-        const viewDetailsButtons = document.querySelectorAll('.view-details-btn');
-        viewDetailsButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const roomId = this.dataset.roomId;
-                fetchRoomDetails(roomId);
-            });
-        });
+        attachViewDetailsListeners();
     }
 
     prevButton.addEventListener('click', () => {
@@ -342,6 +443,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_feedback'])) {
 
     // Initial display
     displayRooms(allRoomsCopy.slice(currentIndex, currentIndex + roomsPerPage));
+});
 </script>
 
 <?php include 'footer.php'; ?>

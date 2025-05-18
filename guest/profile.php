@@ -12,13 +12,13 @@ $user = User::find($_SESSION['user_id']);
     <div class="card shadow p-4 rounded" >
         <div class="row align-items-center mb-2" >
             <div class="col-md-4 text-center">
-                <div class="rounded-circle bg-light border p-5" style="width: 320px; height: 320px; margin-top:70px; margin-right:50px; ">
+                <div class="rounded-circle bg-light border p-5" style="width: 250px; height: 250px; margin-top:50px; margin-right:50px; ">
                     <svg xmlns="http://www.w3.org/2000/svg" width="170" height="170" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
                         <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                     </svg>
                 </div>
             </div>
-            <div class="col-md-8" style="margin-top:30px; padding:10px; margin-right:-70px; margin-left:40px; font-size: 20px;">
+            <div class="col-md-8" style="margin-top:30px; padding:10px; margin-right:-120px; margin-left:80px; font-size: 20px;">
                 <h4><?php echo $user->name; ?></h4>
                 <p class="text-muted mb-0"><?php echo $user->email; ?></p>
                 <div class="mb-2">

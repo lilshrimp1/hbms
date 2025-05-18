@@ -7,8 +7,6 @@ class database
 
     private $password = '135A';
 
-    private $password = 'qwerty';
-
     private $database = 'hbms';
     public $conn;
 
