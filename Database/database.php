@@ -1,14 +1,16 @@
 <?php
 
-class database{
+class database
+{
     private $host = 'localhost';
     private $username = 'root';
     private $password = 'Leah100m_1thv';
     private $database = 'hbms';
     public $conn;
 
-    public function __construct(){
-        try{
+    public function __construct()
+    {
+        try {
             $db = "mysql:host=$this->host;dbname=$this->database;charset=utf8mb4";
             $options = [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -17,26 +19,36 @@ class database{
             ];
 
             $this->conn = new PDO(
-                $db, 
-                $this->username, 
-                $this->password, 
+                $db,
+                $this->username,
+                $this->password,
                 $options
             );
+        } catch (PDOException $e) {
+            // Log the error to a file (recommended for production)
+            error_log("Database Connection Error: " . $e->getMessage());
+            // Or, you could use a more sophisticated logging mechanism
+
+            // Display a user-friendly error message
+            echo "A database error occurred. Please try again later.";
+            die(); // Stop script execution
         }
-        catch(PDOException $e){
-            echo "Connection failed: " . $e->getMessage();
-        }
     }
 
-    public function setConnection($conn){
-        return $this->conn = $conn;
+    public function setConnection($conn)
+    {
+        $this->conn = $conn;
+        return $this; // Added return
     }
 
-    public function getConnection(){
-        return $this->conn ;
+    public function getConnection()
+    {
+        return $this->conn;
     }
 
-    public function __destruct(){
+    public function __destruct()
+    {
         $this->conn = null;
     }
 }
+?>

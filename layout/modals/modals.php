@@ -92,9 +92,6 @@ class Modals {
     private static function bookingFormDetails() {
         global $conn;
 
-        if (!$conn) {
-            die("Connection failed.");
-        }
 
         $roomTypesQuery = "SELECT id, name FROM room_types";
         $roomTypesResult = $conn->query($roomTypesQuery);
@@ -259,21 +256,20 @@ class ImagePaths {
     private static $baseImagePath = "../images/";
 
     public static function getRoomTypeImage($room_type_name) {
+        // Normalize for case-insensitive matching
+        $normalized = strtolower(trim($room_type_name));
         $imageFiles = [
-            'Single Bed Room' => 'single_bedroom.jpeg',
-            'Two Bed Room' => 'two_bedroom.png',
-            'Family Room' => 'family_bedroom.png',
-            'Deluxe Room' => 'suite.png',
+            'single bed room' => 'single_bedroom.jpeg',
+            'two bed room'    => 'two_bedroom.png',
+            'family room'     => 'family_bedroom.png',
+            'deluxe room'     => 'suite.png',
         ];
 
-        if (array_key_exists($room_type_name, $imageFiles)) {
-            return self::$baseImagePath . $imageFiles[$room_type_name];
+        if (isset($imageFiles[$normalized])) {
+            return self::$baseImagePath . $imageFiles[$normalized];
         } else {
             return self::$baseImagePath . 'default_room_type.jpg';
         }
     }
 }
-
-// This prints the create->book modal with id "createModal"
-echo Modals::layout('create', 'book');
 ?>
