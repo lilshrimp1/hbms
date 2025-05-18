@@ -1,6 +1,6 @@
 <?php 
+include '../layout/modals/modals.php';
 require_once '../Database/database.php';
-require_once '../layout/modals/modals.php';
 require_once '../models/User.php';
 
 $database = new database();

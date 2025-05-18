@@ -35,7 +35,7 @@ $user = User::find($_SESSION['user_id']);
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateModal">Edit Profile</button>
         </div>
 
-        <?php echo $modals::layout('update', 'update'); ?>
+        <?php echo $modals->layout('update', 'update'); ?>
 
     </div>
 </div>

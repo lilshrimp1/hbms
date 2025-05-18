@@ -23,7 +23,7 @@
 
 <?php
 if (isset($modals)) {
-    echo Modals::layout('create', 'feedback');
+    echo $modals->layout('create', 'feedback');
 } else {
     // Fallback if $modals is not available
     echo '<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
