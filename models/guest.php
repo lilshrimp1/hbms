@@ -187,3 +187,54 @@ class Guest extends Model {
         }
     }
 }
+
+class Dashboard extends Model {
+    protected static $table = 'reservations';
+
+    public static function getUpcomingBooking() {
+        try {
+            $sql = "SELECT r.*, rm.room_number, rt.name as type_name, GROUP_CONCAT(a.name) as amenities
+                    FROM reservations r
+                    JOIN room rm ON r.room_id = rm.id
+                    JOIN room_types rt ON rm.type_id = rt.id
+                    LEFT JOIN room_amenities ra ON rm.id = ra.room_id
+                    LEFT JOIN amenities a ON ra.amenity_id = a.id
+                    WHERE r.check_in >= CURDATE()
+                    GROUP BY r.id
+                    ORDER BY r.check_in
+                    LIMIT 1";
+
+            $stmt = self::$conn->prepare($sql);
+            $stmt->execute();
+            $booking = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $booking ? $booking : null;
+
+        } catch (PDOException $e) {
+            die("Error: " . $e->getMessage());
+        }
+    }
+
+    public static function getTotalUpcomingBookings() {
+        return self::countByStatusAndDate('confirmed', 'check_in', '>=', date('Y-m-d'));
+    }
+
+    public static function getTotalBookings() {
+        try {
+            $sql = "SELECT COUNT(*) as count FROM reservations";
+            $stmt = self::$conn->prepare($sql);
+            $stmt->execute();
+            $row = $stmt->fetch();
+            return $row ? $row['count'] : 0;
+        } catch (PDOException $e) {
+            die("Error: " . $e->getMessage());
+        }
+    }
+
+    public static function getTotalAvailableRooms() {
+        return Room::countByStatus('available');
+    }
+}
+
+    
+?>

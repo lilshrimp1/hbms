@@ -14,7 +14,7 @@
         </div>
         <div>
             For more feedback
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#feedbackModal">
                 Click here!
             </button>
         </div>
@@ -22,28 +22,7 @@
 </footer>
 
 <?php
-if (isset($modals)) {
-    echo Modals::layout('create', 'feedback');
-} else {
-    // Fallback if $modals is not available
-    echo '<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="createModalLabel">Add New Room</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Form to add a new room will be here.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save Room</button>
-                    </div>
-                </div>
-            </div>
-        </div>';
-}
+    echo Modals::layout('feedback');
 ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>

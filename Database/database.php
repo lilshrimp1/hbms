@@ -4,7 +4,12 @@ class database
 {
     private $host = 'localhost';
     private $username = 'root';
+
+
+    private $password = '135A';
+
     private $password = 'Pathfinder11';
+
     private $database = 'hbms';
     public $conn;
 
