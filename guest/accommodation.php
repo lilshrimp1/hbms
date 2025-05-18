@@ -202,6 +202,13 @@ include 'header.php';
             </tr>
         </thead>
         <tbody>
+<<<<<<< HEAD
+=======
+            <?php foreach ($reservations as $reservation): 
+                $rooms = Room::find($reservation->room_id);
+                $room_types = RoomType::find($rooms->type_id);
+                ?>
+>>>>>>> parent of 7096320 (Merge pull request #11 from NemMos16/main)
             <tr>
                 <td></td>
                 <td></td>

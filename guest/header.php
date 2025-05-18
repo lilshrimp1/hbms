@@ -1,5 +1,16 @@
 <?php 
 include '../layout/modals/modals.php';
+<<<<<<< HEAD
+=======
+require_once '../Database/database.php';
+require_once '../models/User.php';
+
+$database = new database();
+$conn = $database->getConnection();
+session_start();
+User::setConnection($conn);
+$user = User::find($_SESSION['user_id']);
+>>>>>>> parent of 7096320 (Merge pull request #11 from NemMos16/main)
 
 ?>
 <?php 
