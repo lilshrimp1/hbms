@@ -28,44 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $message = 'Review not found.';
         }
-
-$status = $_GET['status'];
-
-$review = Review::find($status);
-
-
-$amenity->save();
-
-if ($amenity) {
-    if ($amenity) {
-        echo '<script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    Swal.fire({
-                        title: "Success!",
-                        text: "Status has been updated.",
-                        icon: "success"
-                    }).then(function() {
-                        window.location = "index.php";
-                    });
-            </script>';
-
     } else {
-
-        echo '<script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    Swal.fire({
-                        title: "Error!",
-                        text: "Failed to update Status.",
-                        icon: "error",
-                        confirmButtonText: "Ok"
-                    }).then(function() {
-                        window.location = "edit.php?id=' . $id . '";
-                    });
-                });
-            </script>';
-
         $message = 'Missing review ID or status.';
-
     }
 }
 ?>
