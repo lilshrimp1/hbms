@@ -15,6 +15,9 @@
     $reservations = Reservation::all();
 
     RoomType::setConnection($conn);
+    Room::setConnection($conn);
+    User::setConnection($conn);
+    Payment::setConnection($conn);
     
 ?>
 
@@ -264,6 +267,7 @@
                         <span class="icon"><i class="fa fa-user"></i></span>
                         <span class="text">Amenities</span></a>
                     </li>
+                    <?php } ?>
                         <li><a href="../Reservation/index.php">
                                 <span class="icon"><i class="fa fa-user"></i></span>
                                 <span class="text">Reservation</span></a>
@@ -284,7 +288,7 @@
                 </div>
             </nav>
         </aside>
-        <?php } ?>
+        
         <main class="flex-1 p-8">
             <header>
                 <div class="flex">
@@ -340,17 +344,22 @@
                             <tr>
                                 <td><?= $user->id ?></td>
                                 <td><?= $room->id ?></td>
-                                <td><?= $reservation->check_in ?></td>
-                                <td><?= $reservation->check_out ?></td>
+                                <td><?= $reservation->check_in ?: 'N/A' ?></td>
+                                <td><?= $reservation->check_out ?: 'N/A' ?></td>
                                 <td><?= $reservation->guests?></td>
                                 <td><?= $reservation->status?></td>
                                 <td><?= $room->status?></td>
-                                <td><?= $payment->status?></td>
+                                <td><?= $payment ? $payment->status : 'N/A' ?></td>
                                 <td class="actions-cell">
-                                    <a href="confirm.php?id=<?= $reservation->id ?>" class="action-button view-button">Confirm Status</a>
-                                    <a href="check_in_out.php?id=<?= $reservation->id ?>&action=check_in" class="action-button edit-button">Check In</a>
-                                    <a href="check_in_out.php?id=<?= $reservation->id ?>&action=check_out" class="action-button deactivate-button">Check Out</a>
-                                    <a href="overcapacity.php?id=<?= $reservation->id ?>" class="action-button deactivate-button">Overcapacity</a>
+                                    <?php if ($reservation->status == 'Pending'): ?>
+                                        <a href="confirm.php?id=<?= $reservation->id ?>" class="action-button view-button">Confirm Status</a>
+                                    <?php elseif (empty($reservation->check_in) || $reservation->check_in == 'N/A'): ?>
+                                        <a href="check_in.php?id=<?= $reservation->id ?>&action=check_in" class="action-button edit-button">Check In</a>
+                                    <?php elseif ($reservation->check_in == 'Checked In'): ?>
+                                        <a href="check_out.php?id=<?= $reservation->id ?>&action=check_out" class="action-button deactivate-button">Check Out</a>
+                                    <?php elseif ($reservation->guests < $room->capacity): ?>
+                                        <a href="overcapacity.php?id=<?= $reservation->id ?>" class="action-button deactivate-button">Overcapacity</a>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
