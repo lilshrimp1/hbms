@@ -20,7 +20,7 @@ $room->capacity = $_GET['capacity'];
 
 $room->save();
 
-if ($room) {
+
     if ($room) {
         echo '<script>
                 Swal.fire({
@@ -44,7 +44,7 @@ if ($room) {
                 });
             </script>';
     }
-}
+
 
 ?>
 

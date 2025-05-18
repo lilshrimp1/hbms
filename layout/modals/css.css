@@ -4,22 +4,23 @@
 
 .modal_container {
   background-color: rgba(0, 0, 0, 0.3);
-  display: flex;
+  display: none; /* Hidden by default */
   align-items: center;
   justify-content: center;
   position: fixed;
-  opacity: 0;
-  pointer-events: none;
   top: 0;
   left: 0;
   height: 100vh;
   width: 100vw;
+  opacity: 0;
+  pointer-events: none;
   transition: opacity 0.3s ease;
 }
 
 .modal_container.show {
-  pointer-events: auto;
+  display: flex;
   opacity: 1;
+  pointer-events: auto;
 }
 
 .modal {
@@ -64,4 +65,56 @@
 .star-rating label:hover,
 .star-rating label:hover ~ label {
   color: #00b4b6;
+}
+
+/* Modal content should be wide */
+.modal-content {
+  background-color: #fefefe;
+  margin: 40px auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 900px !important;
+  max-width: 95vw;
+  min-width: 700px;
+  border-radius: 20px;
+}
+
+/* Flex container for image and form */
+.booking-modal-flex {
+  display: flex;
+  min-height: 400px;
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+/* Image section */
+.booking-modal-image {
+  flex: 1 1 45%;
+  background: #222;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  min-width: 300px;
+  max-width: 400px;
+  min-height: 400px;
+}
+
+.booking-modal-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+/* Form section */
+.booking-modal-form {
+  flex: 1 1 55%;
+  padding: 40px 32px;
+  background: linear-gradient(135deg, #e8f5f8 60%, #d3d3d3 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 300px;
+  min-height: 400px;
 }
