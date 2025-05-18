@@ -18,25 +18,25 @@ $user->name = $_GET['name'];
 $user->email = $_GET['email'];
 $user->role = $_GET['role'];
 $user->status = $_GET['status'];
-$user->contact_no = $_GET['contact_no'];
-$user->address = $_GET['address'];
 $user->update($_GET['update']);
 
 $user->save();
 
 if ($user) {
     echo '<script>
-            Swal.fire({
-                title: "Success!",
-                text: "User record has been updated.",
-                icon: "success",
-                confirmButtonText: "Ok"
-            }).then(function() {
-                window.location = "index.php";
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    title: "Success!",
+                    text: "User record has been updated.",
+                    icon: "success"
+                }).then(function() {
+                    window.location = "index.php";
+                });
             });
         </script>';
 } else {
         echo '<script>
+            document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     title: "Error!",
                     text: "Failed to update User record.",

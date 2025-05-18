@@ -64,20 +64,24 @@ class Review extends Model{
         : null;
     }
 
-    public function update(array $data){
-        $result = parent::updateById($this->id, $data);
+    public static function updateById($id, $data) {
+        $table = static::$table;
+        $fields = [];
+        $params = [];
 
-        if($result){
-            foreach($data as $key => $value){
-                if(property_exists($this, $key)){
-                    $this->$key = $value;
-                }
-            }
+        foreach ($data as $column => $value) {
+            $fields[] = "$column = :$column";
+            $params[$column] = $value;
         }
-        else{
-            return false;
-        }
+
+        $params['id'] = $id; // Add the ID to the parameters
+
+        $sql = "UPDATE $table SET " . implode(', ', $fields) . " WHERE id = :id";
+        $stmt = static::$conn->prepare($sql);
+
+        return $stmt->execute($params);
     }
+
 
     public function save(){
         $data = [
@@ -89,7 +93,8 @@ class Review extends Model{
             'updated_at' => $this->updated_at
         ];
 
-        $this->update($data);
+        // Use updateById instead of undefined update()
+        return self::updateById($this->id, $data);
     }
 
     public function delete(){

@@ -14,9 +14,10 @@
         if($check_stmt){
             // Room already exists
             echo '<script>
+                document.addEventListener("DOMContentLoaded", function() {
                     Swal.fire({
                         title: "Error!",
-                        text: "This Room Number already exists. Please use a different Room Number.",
+                        text: "This Room already exists. Please use a different Room.",
                         icon: "error",
                         confirmButtonText: "Ok"
                     }).then(function() {
@@ -41,25 +42,28 @@
     if($stmt){
         if($stmt){
             echo '<script>
-                    Swal.fire({
-                        title: "Success!",
-                        text: "Room has been created.",
-                        icon: "success",
-                        confirmButtonText: "Ok"
-                    }).then(function() {
-                        window.location = "index.php";
+                    document.addEventListener("DOMContentLoaded", function() {
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Room has been created.",
+                            icon: "success"
+                        }).then(function() {
+                            window.location = "index.php";
+                        });
                     });
                 </script>';
         }
         else{
             echo '<script>
-                    Swal.fire({
-                        title: "Error!",
-                        text: "Failed to save Room, please try again!",
-                        icon: "error",
-                        confirmButtonText: "Ok"
-                    }).then(function() {
-                        window.location = "create.php";
+                    document.addEventListener("DOMContentLoaded", function() {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Failed to save Room, please try again!",
+                            icon: "error",
+                            confirmButtonText: "Ok"
+                        }).then(function() {
+                            window.location = "create.php";
+                        });
                     });
                 </script>';
         }

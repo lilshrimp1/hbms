@@ -23,24 +23,27 @@ $room->save();
 
     if ($room) {
         echo '<script>
-                Swal.fire({
-                    title: "Success!",
-                    text: "room record has been updated.",
-                    icon: "success",
-                    confirmButtonText: "Ok"
-                }).then(function() {
-                    window.location = "index.php";
+                document.addEventListener("DOMContentLoaded", function() {
+                    Swal.fire({
+                        title: "Success!",
+                        text: "room record has been updated.",
+                        icon: "success"
+                    }).then(() => {
+                        window.location = "index.php";
+                    });
                 });
             </script>';
     } else {
         echo '<script>
-                Swal.fire({
-                    title: "Error!",
-                    text: "Failed to update room record:,
-                    icon: "error",
-                    confirmButtonText: "Ok"
-                }).then(function() {
-                    window.location = "edit.php?id=' . $id . '";
+                document.addEventListener("DOMContentLoaded", function() {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Failed to update room record.",
+                        icon: "error",
+                        confirmButtonText: "Ok"
+                    }).then(() => {
+                        window.location = "index.php";
+                    });
                 });
             </script>';
     }

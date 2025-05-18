@@ -10,6 +10,8 @@ class Modals {
         self::$js = $js;
     }
 
+    
+
     public static function layout($modal, $action, $data = []) {
         $title = '';
         $buttonText = '';

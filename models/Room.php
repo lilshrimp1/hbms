@@ -122,6 +122,10 @@ public static function getCurrentGuestInfo($room_id){
     }
 
     public function delete(){
+        try {
+        $stmt = self::$conn->prepare("DELETE FROM room_amenities WHERE room_id = ?");
+        $stmt->execute([$this->id]);
+
         $result = parent::deleteById($this->id);
 
         if($result){
@@ -130,10 +134,14 @@ public static function getCurrentGuestInfo($room_id){
                     unset($this->$key);
                 }   
             }
-        }
-        else{
+            return true;
+        } else {
             return false;
-        } 
+        }
+    } catch (PDOException $e) {
+        error_log("Room deletion failed: " . $e->getMessage());
+        return false;
+    }
     }
 
     public static function where($column, $operator, $value){
