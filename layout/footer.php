@@ -81,11 +81,5 @@
     </script>
 
     <script src="https://kit.fontawesome.com/de63ed52cd.js" crossorigin="anonymous"></script>
-
-    <footer class="footer bg-danger-subtle text-black text-opacity-75">
-        <div class="container text-center">
-            Today is <?php echo date('l, F j, Y, h:i A'); ?>     
-        </div>
-    </footer>
 </body>
 </html>

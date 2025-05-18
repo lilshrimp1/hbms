@@ -45,40 +45,85 @@ $amenities = Amenity::all();
             border-bottom: 1px solid #f3f4f6;
             text-align: center; 
         }
-        .edit-button {
-            background-color: #fef08a;
-            color: #1e293b;
-            text-decoration: none; 
-        }
-        .edit-button:hover{
-             background-color: #fde047;
-        }
+    .action-button {
+        padding: 0.4rem 0.6rem;
+        border-radius: 1rem;
+        font-weight: 600;
+        margin-right: 5px;
+        display: inline-block;
+    }
 
-        .deactivate-button {
-            background-color: #fecaca;
-            color: #7f1d1d;
-            text-decoration: none;
-        }
+    .view-button {
+        background-color:rgb(241, 212, 168);
+        color:rgb(167, 120, 18);
+        text-decoration: none; 
+    }
+    .view-button:hover {
+        background-color:rgb(105, 79, 11);
+    }
 
-        .deactivate-button:hover {
-             background-color: #fca5a5;
-        }
-        
-        .card-body.small-text {
+    .edit-button {
+        background-color: #fef08a;
+        color: #1e293b;
+        text-decoration: none; 
+    }
+
+    .edit-button:hover {
+        background-color: #fde047;
+    }
+
+    .deactivate-button {
+        background-color: #fecaca;
+        color: #7f1d1d;
+        text-decoration: none;
+    }
+
+    .deactivate-button:hover {
+        background-color: #fca5a5;
+    }
+
+    .activate-button {
+        background-color:rgb(180, 233, 197);
+        color:rgb(24, 145, 94);
+        text-decoration: none;
+    }
+
+    .activate-button:hover {
+        background-color: #7dd3fc;
+    }
+
+    .delete-button {
+        background-color: #bae6fd;
+        color: #1d4ed8;
+        text-decoration: none;
+    }
+
+    .delete-button:hover {
+        text-decoration: underline;
+    }
+
+    .card-body.small-text {
         font-size: 15px; 
-        }
-        
-        .data-table-container {
-            background-color: white;
-            border-radius: 2rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            padding: 1.5rem;
-            margin-top: 120px !important;
-            width: 100%;
-            max-width: 1000px;
-            margin-left: 250px;
-            
-        }
+    }
+
+    .data-table-container {
+        background-color: white;
+        border-radius: 2rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        padding: 0.5rem;
+        margin-top: 120px !important;
+        width: 100%;
+        max-width: 1000px;
+        margin-left: 200px;
+    }
+
+        .actions-cell {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: left;
+        gap: 2px;
+}
+
 </style>
 <body class="bg" style="background-image:url(../images/bg.png); position:fixed;">
     <div class="flex">
@@ -108,10 +153,18 @@ $amenities = Amenity::all();
                         <span class="icon"><i class="fa fa-user"></i></span>
                         <span class="text">Amenities</span></a>
                     </li>
-                    <li><a href="../main/pdf.php">
-                        <span class="icon"><i class="fa fa-file-pdf"></i></span>
-                        <span class="text">PDF</span></a>
-                    </li>
+                        <li><a href="../Reservation/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
+                                <span class="text">Reservation</span></a>
+                        </li>
+                        <li><a href="../Review/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
+                                <span class="text">Feedback</span></a>
+                        </li>
+                        <li><a href="../User/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
+                                <span class="text">Manage User</span></a>
+                        </li>
                     <li><a href="../auth/logout.php">
                         <span class="icon"><i class="fa fa-sign-out"></i></span>
                         <span class="text">Logout</span></a>
@@ -149,10 +202,18 @@ $amenities = Amenity::all();
                 </header>
 
                 <div class="data-table-container" style="margin-top:180px; position:relative; font-size:15px;">
-                <div style="margin-top:-100px;">
-                    <div class="flex items-right mb-6 justify-end" >
-                        <a href="create.php" class="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style="border-radius: 1rem; 
-                        background-color:#1BB3BD; text-decoration: none;">Add Amenity</a>
+                    <div style="margin-top:-100px;">
+                        
+                        <div class="d-flex justify-content-end mb-3 gap-2">
+                            <a href="create.php" class="btn text-white fw-bold" 
+                            style="border-radius: 1rem; background-color:#1BB3BD; text-decoration: none;">
+                                Add Amenity
+                            </a>
+
+                            <a href="fpdf.php" class="btn btn-danger"style="border-radius: 1rem; text-decoration: none;">
+                                Export to PDF
+                            </a>
+                        </div>
                     </div>
 
 
@@ -179,9 +240,22 @@ $amenities = Amenity::all();
                             <td><?= $amenity->price ?></td>
                             <td><?= $amenity->description ?></td>
                             <td><?= $amenity->status ?></td>
-                            <td>    
-                                <a href="edit.php?id=<?= $amenity->id ?>" class="action-button edit-button"">Edit</a>
-                                <a href="destroy.php?id=<?= $amenity->id ?>" class="action-button deactivate-button"">Delete</a>
+                            <td class="actions-cell">
+                                <a href="show.php?id=<?= $amenity->id ?>" class="action-button view-button">View</a>
+                                <a href="edit.php?id=<?= $amenity->id ?>" class="action-button edit-button">Edit</a>
+                                <?php if($amenity->status == 'Active'): ?>
+                                    <a href="deactivate.php?id=<?= $amenity->id ?>" class="action-button deactivate-button">Deactivate</a>
+                                <?php endif; ?>
+                                <?php if($amenity->status == 'Inactive'): ?>
+                                    <a href="activate.php?id=<?= $amenity->id ?>" class="action-button activate-button">Activate</a>
+                                <?php endif; ?>
+                                <?php if(
+                                    isset($_SESSION['role']) && 
+                                    ($_SESSION['role'] == 'Super Admin' || $_SESSION['role'] == 'Admin') &&
+                                    !$amenity->isUsedInReservation($amenity->id)
+                                ): ?>
+                                    <a href="destroy.php?id=<?= $amenity->id ?>" class="action-button delete-button">Delete</a>
+                                <?php endif; ?>
                             </td>
                         </tr>
                         <?php endforeach; ?>

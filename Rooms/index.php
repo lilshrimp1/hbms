@@ -1,6 +1,7 @@
 <?php 
     require_once '../Database/database.php';
     require_once '../models/Room.php';
+    require_once '../models/RoomType.php';
     
     $database = new database();
     $conn = $database->getConnection();
@@ -9,6 +10,8 @@
 
     Room::setConnection($conn);
     $rooms = Room::all();
+
+    RoomType::setConnection($conn);
 ?>
 
 <!DOCTYPE html>
@@ -68,7 +71,7 @@
             background-color: white;
             border-radius: 0.75rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 1.5rem; 
+            padding: 0.50rem; 
             margin-top: 120px; 
             margin-left: 300px; 
             margin-right: auto; 
@@ -221,6 +224,12 @@
         text-overflow: ellipsis; 
     }
 
+    .actions-cell {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: left;
+        gap: 8px;
+}
     </style>
 </head>
 <body class="bg" style="background-image:url(../images/bg.png); position:fixed;">
@@ -251,18 +260,18 @@
                         <span class="icon"><i class="fa fa-user"></i></span>
                         <span class="text">Amenities</span></a>
                     </li>
-                    <li><a href="../Review/index.php">
-                                <span class="icon"><i class="fa fa-file-pdf"></i></span>
+                        <li><a href="../Reservation/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
+                                <span class="text">Reservation</span></a>
+                        </li>
+                        <li><a href="../Review/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
                                 <span class="text">Feedback</span></a>
                         </li>
-                    <li><a href="../Reservation/index.php">
-                                <span class="icon"><i class="fa fa-file-pdf"></i></span>
-                                <span class="text">Reservation</span></a>
-                    </li>
-                    <li><a href="../Reservation/index.php">
-                                <span class="icon"><i class="fa fa-file-pdf"></i></span>
-                                <span class="text">Manage Users</span></a>
-                    </li>
+                        <li><a href="../User/index.php">
+                                <span class="icon"><i class="fa fa-user"></i></span>
+                                <span class="text">Manage User</span></a>
+                        </li>
                     <li><a href="../auth/logout.php">
                         <span class="icon"><i class="fa fa-sign-out"></i></span>
                         <span class="text">Logout</span></a>
@@ -301,12 +310,17 @@
                 
                 <div class="data-table-container" style="margin-top:180px; position:relative; font-size:15px;">
                 <div style="margin-top:-100px;">
-                    <div class="flex items-right mb-6 justify-end" >
-                        <a href="create.php" class="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style="border-radius: 1rem; 
-                        background-color:#1BB3BD; text-decoration: none;">Add New Room</a>
-                    </div>
+                        <div class="d-flex justify-content-end mb-3 gap-2">
+                            <a href="create.php" class="btn text-white fw-bold" 
+                            style="border-radius: 1rem; background-color:#1BB3BD; text-decoration: none;">
+                                Add Room
+                            </a>
 
-                </div>
+                            <a href="fpdf.php" class="btn btn-danger"style="border-radius: 1rem; text-decoration: none;">
+                                Export to PDF
+                            </a>
+                        </div>
+                    </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full">
                         <thead class="bg-white-100">
@@ -323,19 +337,31 @@
                             <?php
                             $i = 1;
                             foreach($rooms as $room):
+                                $room_type = RoomType::find($room->type_id);
+                                // Assume $room->status can be 'available', 'occupied', 'reserved', 'inactive'
+                                // Assume $room->hasPastReservations() returns true if room has past reservations
                             ?>
                             <tr>
                                 <td><?= $i++ ?></td>
                                 <td><?= $room->room_number ?></td>
-                                <td><?= $room->type_id ?></td>
+                                <td><?= $room_type ? $room_type->name : 'N/A' ?></td>
                                 <td><?= $room->price ?></td>
                                 <td><?= $room->status ?></td>
-                                <td>
+                                <td class="actions-cell">
                                     <a href="show.php?id=<?= $room->id ?>" class="action-button view-button">View</a>
                                     <a href="edit.php?id=<?= $room->id ?>" class="action-button edit-button">Edit</a>
-                                    <?php if(isset($_SESSION['role']) && ($_SESSION['role'] == 'Super Admin' || $_SESSION['role'] == 'Admin')){ ?>
-                                        <a href="destroy.php?id=<?= $room->id ?>" class="action-button deactivate-button">Delete</a>
-                                    <?php } ?>
+                                    <?php if (
+                                        isset($_SESSION['role']) && 
+                                        ($_SESSION['role'] == 'Super Admin' || $_SESSION['role'] == 'Admin')
+                                    ): ?>
+                                        <?php if ($room->status == 'available' && !$room->hasPastReservations($room->id)): ?>
+                                            <a href="destroy.php?id=<?= $room->id ?>" class="action-button deactivate-button">Delete</a>
+                                        <?php elseif ($room->hasPastReservations($room->id) && $room->status != 'Inactive'): ?>
+                                            <a href="deactivate.php?id=<?= $room->id ?>" class="action-button deactivate-button">Deactivate</a>
+                                        <?php elseif ($room->hasPastReservations($room->id) && $room->status != 'Active'): ?>
+                                            <a href="deactivate.php?id=<?= $room->id ?>" class="action-button deactivate-button">Activate</a>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                             <?php endforeach; ?>

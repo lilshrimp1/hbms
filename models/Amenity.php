@@ -38,10 +38,34 @@ class Amenity extends Model{
         : null; 
     }
 
+
+public static function getCurrentGuestInfo($amenity_id){
+    $result = parent::getCurrentGuestInfo($amenity_id);
+    
+    if ($result) {
+        // Convert associative array to object
+        $guest = new \stdClass();
+        foreach ($result as $key => $value) {
+            $guest->$key = $value;
+        }
+        return $guest;
+    }
+    
+    return null;
+}
+
     public static function findStatus($status){
         $result = parent::findStatus($status);
 
         return $result 
+        ? array_map(fn ($user) => new self($user), $result)
+        : null; 
+    }
+
+    public static function isUsedInReservation($id){
+        $result = parent::isUsedInReservation($id);
+
+        return (is_array($result) && !empty($result))
         ? array_map(fn ($user) => new self($user), $result)
         : null; 
     }

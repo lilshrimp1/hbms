@@ -1,25 +1,38 @@
-<?php session_start();?>
+<?php session_start(); ?>
 <?php include '../layout/header.php'; ?>
-<?php include '../auth/super.php'; ?>
 <?php require_once '../Database/database.php'; 
       require_once '../models/Amenity.php';
-        $database = new database();
-        $conn = $database->getConnection();
+    $database = new database();
+    $conn = $database->getConnection();
 ?>
 
+
+
 <?php
+
+if(isset($_SESSION['role']) && ($_SESSION['role'] != 'Super Admin' && $_SESSION['role'] != 'Admin')){
+    echo '<script>
+        Swal.fire({
+            title: "Unauthorized!",
+            text: "You do not have permission to delete this Room.",
+            icon: "error",
+            confirmButtonText: "Ok"
+        }).then(() => {
+            window.location = "index.php";
+        });
+    </script>';
+    exit();
+}
+
 Amenity::setConnection($conn);
 // If deletion is confirmed via POST
 if(isset($_POST['confirm_delete'])) {
-
     $id = $_GET['id'];
+    $amenity = Amenity::find($id);
+    $amenity->delete();
 
-    $user = Amenity::find($id);
-
-    $user->delete();
-    
-    if($user){
-        if($user){
+    if($amenity){
+        if($amenity){
             echo '<script>
                 Swal.fire({
                     title: "Deleted!",
@@ -33,7 +46,7 @@ if(isset($_POST['confirm_delete'])) {
             echo '<script>
                 Swal.fire({
                     title: "Error!",
-                    text: "Failed to delete Amenity record, please try again!",
+                    text: "Failed to delete amenity record, please try again!",
                     icon: "error",
                     confirmButtonText: "Ok"
                 }).then(() => {
@@ -74,6 +87,7 @@ if(isset($_POST['confirm_delete'])) {
         });
     </script>';
 }
+
 ?>
 
 <?php include '../layout/footer.php'; ?>

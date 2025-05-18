@@ -114,28 +114,10 @@
             margin-left: 200px;
         }
 
-        .data-table-container {
-            background-color: white;
-            border-radius: 2rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            padding: 1rem;
-            margin-top: 5rem;
-            width: 100%;
-            max-width: 800px;
-            margin-left: 300px;
-            
-        }
+        
         
 
-        .action-button {
-            border-radius: 1rem;
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
-            line-height: 1.25rem;
-            font-weight: 500;
-            cursor: pointer;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
+      
 
 
         header {
@@ -190,25 +172,27 @@
             background-color:rgb(255, 255, 255);
         }
 
-        .sidebar ul li a {
-            padding: 12px 20px;
-            text-decoration: none;
-            font-size: 18px;
-            color: white;
-            display: block;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
         .card-header.bg-danger-subtle {
             background-color:#1bb3bd !important; 
             color: white !important; 
     }
+
+    .sidebar a {
+    text-decoration: none !important;
+}
+
+            .sidebar ul li a {
+        padding: 12px 20px;
+        text-decoration: none;
+        font-size: 18px;
+        color: white;
+        display: block;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        white-space: nowrap; 
+        overflow: hidden; 
+        text-overflow: ellipsis; 
+    }
     </style>
 </head>
-</body>
-</html>
