@@ -19,13 +19,15 @@ if ($check_stmt) {
     if ($check_stmt) {
         // Amenity already exists
         echo '<script>
-                Swal.fire({
-                    title: "Error!",
-                    text: "This Amenity already exists. Please use a different Amenity.",
-                    icon: "error",
-                    confirmButtonText: "Ok"
-                }).then(function() {
-                    window.location = "create.php";
+                document.addEventListener("DOMContentLoaded", function() {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "This Amenity already exists. Please use a different Amenity.",
+                        icon: "error",
+                        confirmButtonText: "Ok"
+                    }).then(function() {
+                        window.location = "create.php";
+                    });
                 });
             </script>';
         exit();

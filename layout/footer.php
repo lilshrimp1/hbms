@@ -79,7 +79,8 @@
         });
     });
     </script>
-
+    <script src="https://unpkg.com/@tailwindcss/browser@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://kit.fontawesome.com/de63ed52cd.js" crossorigin="anonymous"></script>
 </body>
 </html>

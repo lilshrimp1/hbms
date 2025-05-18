@@ -2,25 +2,35 @@
 <?php include '../layout/header.php'; ?>
 <?php include '../auth/super.php'; ?>
 <?php require_once '../Database/database.php'; 
-      require_once '../models/Room.php';
+      require_once '../models/Reservation.php';
+      require_once '../models/Room.php'; 
+      require_once '../models/Payment.php';
+
         $database = new database();
         $conn = $database->getConnection();
 ?>
 
 <?php
-Room::setConnection($conn);
+Reservation::setConnection($conn);
 // If deletion is confirmed via POST
 if (isset($_POST['confirm_delete'])) {
     $id = $_GET['id'];
-    $room = Room::find($id);
-    $room->status = 'Inactive';
+    $reservation = Reservation::find($id);
+    $room = Room::find($reservation->room_id);
+    $payments = Payment::where('reservation_id', '=', $reservation->id);
+    $payment = is_array($payments) && count($payments) > 0 ? $payments[0] : null;
+    $reservation->check_in = date('Y-m-d H:i:s');
+    $reservation->status = 'Checked In';
+    $room->status = 'Occupied';
+    $payment->status = 'Pending';
 
-    if ($room->save()) {
+
+    if (!$reservation->save()) {
         echo '<script>
             document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
-                    title: "Deactivated!",
-                    text: "The User has been deactivated.",
+                    title: "Checked In!",
+                    text: "The reservation has been checked in.",
                     icon: "success"
                 }).then(() => {
                     window.location = "index.php";
@@ -32,7 +42,7 @@ if (isset($_POST['confirm_delete'])) {
             document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     title: "Error!",
-                    text: "Failed to Deactivate User, please try again!",
+                    text: "Failed to Check In Reservation, please try again!",
                     icon: "error",
                     confirmButtonText: "Ok"
                 }).then(() => {
