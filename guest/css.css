@@ -17,7 +17,7 @@ header h1 {
 }
 
 .textcenter {
-    background-image: url('/HOTEL-BOOKING-MANAGEMENT-SYSTEM/photos/bgimg.jpeg');
+    background-image: url('../images/bgimg.jpeg');
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
@@ -263,13 +263,6 @@ header h1 {
     color: rgba(0, 0, 0, 0.7);
 }
 
-.left-arrow {
-    /* Position to the left of the visual */
-}
-
-.right-arrow {
-    /* Position to the right of the visual */
-}
 
 .lastpage {
     display: flex;
@@ -423,6 +416,54 @@ header h1 {
     margin-left: 500px;
     padding:50px;
 }
+
+
+
+.modal_container {
+    background-color: rgba(0, 0, 0, 0.3);
+    display: none; /* Hidden by default */
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    transition: opacity 0.3s ease;
+}
+
+.modal_container.show {
+    display: flex; /* Show the modal container */
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content { /* Targeting the modal content div from Modals.php */
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    border-radius: 20px; /* Consistent with your style */
+    min-width: 400px; /* Consistent with your style */
+}
+
+.close-button { /* Targeting the close span from Modals.php */
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Add any other CSS rules from your original css.css file */
 
 footer {
     background-image: url('../images/footer.jpg'), linear-gradient(to top, rgba(0, 0, 0, 1), rgb(245, 240, 240));

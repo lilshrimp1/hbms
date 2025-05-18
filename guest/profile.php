@@ -1,5 +1,12 @@
 <?php
 include 'header.php';
+require_once '../Database/database.php';
+require_once '../models/User.php';
+
+$database = new database();
+$conn = $database->getConnection();
+User::setConnection($conn);
+$user = User::find($_SESSION['user_id']);
 ?>
 
 <div class="container d-flex justify-content-center align-items-center vh-100">
@@ -13,13 +20,13 @@ include 'header.php';
                 </div>
             </div>
             <div class="col-md-8" style="margin-top:-50px;">
-                <h4>Moses Alfonso</h4>
-                <p class="text-muted mb-0">mosesjamelalfonso@gmail.com</p>
+                <h4><?php echo $user->name; ?></h4>
+                <p class="text-muted mb-0"><?php echo $user->email; ?></p>
                 <div class="mb-2">
-                    <p class="mb-0"><strong class="text-muted">Contact Number:</strong> 09196795916</p>
+                    <p class="mb-0"><strong class="text-muted">Contact Number:</strong> <?php echo $user->contact_no; ?></p>
                 </div>
                 <div>
-                    <p class="mb-0"><strong class="text-muted">Address:</strong> Brgy. Tondod, San Jose City</p>
+                    <p class="mb-0"><strong class="text-muted">Address:</strong> <?php echo $user->address; ?></p>
                 </div>
             </div>
         </div>
@@ -28,7 +35,7 @@ include 'header.php';
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateModal">Edit Profile</button>
         </div>
 
-        <?php echo $modals->layout('update', 'update'); ?>
+        <?php echo $modals::layout('update', 'update'); ?>
 
     </div>
 </div>

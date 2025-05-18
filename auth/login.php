@@ -31,9 +31,13 @@
 
                     // $_SESSION['user'] = $user;
                     // $_SESSION['user']->email;
-                    
+                    if($user->role == 'Super Admin' || $user->role == 'Admin' || $user->role == 'Front Desk'){
                         header('Location: ../main/index.php');
                         exit();
+                    }else{
+                        header('Location: ../guest/index.php');
+                        exit();
+                    }
                 }
                 else{
                     $_SESSION['error'] = "Invalid email or password.";
