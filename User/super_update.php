@@ -26,17 +26,19 @@ $user->save();
 
 if ($user) {
     echo '<script>
-            Swal.fire({
-                title: "Success!",
-                text: "User record has been updated.",
-                icon: "success",
-                confirmButtonText: "Ok"
-            }).then(function() {
-                window.location = "index.php";
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    title: "Success!",
+                    text: "User record has been updated.",
+                    icon: "success"
+                }).then(function() {
+                    window.location = "index.php";
+                });
             });
         </script>';
 } else {
         echo '<script>
+            document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     title: "Error!",
                     text: "Failed to update User record.",
