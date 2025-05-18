@@ -21,12 +21,19 @@ $modals = new Modals();
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand fw-bold" href="#" style="margin-left: 200px;">HBMS</a>
+      
+    <a class="navbar-brand fw-bold" href="index.php" style="margin-left: 200px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-house-fill" viewBox="0 0 16 16">
+        <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z"/>
+        <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293z"/>
+      </svg>
+      HBMS
+    </a>
     <div class="collapse navbar-collapse justify-content-end">
       <ul class="navbar-nav">
-        <li class="nav-item" style="margin-right:100px;"><a class="nav-link fw-semibold" href="#">Home</a></li>
-        <li class="nav-item" style="margin-right:100px;"><a class="nav-link fw-semibold" href="#">Accommodation</a></li>
-        <li class="nav-item" style="margin-right:450px;"><a class="nav-link fw-semibold" href="#">Manage Profile</a></li>
+        <li class="nav-item" style="margin-right:100px;"><a class="nav-link fw-semibold" href="index.php">Home</a></li>
+        <li class="nav-item" style="margin-right:100px;"><a class="nav-link fw-semibold" href="accommodation.php">Accommodation</a></li>
+        <li class="nav-item" style="margin-right:450px;"><a class="nav-link fw-semibold" href="profile.php">Manage Profile</a></li>
         <li class="nav-item">
           <a class="nav-link" href="#" style="margin-right: 100px;"><i class="bi bi-person-circle"></i> Moses Alfonso</a>
         </li>
