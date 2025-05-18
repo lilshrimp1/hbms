@@ -158,8 +158,8 @@ $reservations = Reservation::findByColumn('user_id', $_SESSION['user_id']);
         <img src="../images/single_bedroom.jpeg" alt="Single Bedroom" />
         <div class="card-body text-center">
             <h5 class="fw-bold mt-2">Single Bedroom</h5>
-            <a href="#" data-bs-toggle="modal" data-bs-target="#roomModal"
-               onclick="openRoomModal('Single Bedroom', 'A cozy room for one with all basic amenities.', '/images/single_bedroom.jpeg')">Details</a><br>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#roomModal" style="text-decoration: none;"
+               onclick="openRoomModal('Single Bedroom', 'A cozy room for one with all basic amenities.', '../images/single_bedroom.jpeg')">Details</a><br>
             <button class="btn btn-info text-white rounded-pill mt-2"
                     data-bs-toggle="modal" data-bs-target="#createModal">Add room +</button>
         </div>
@@ -169,8 +169,8 @@ $reservations = Reservation::findByColumn('user_id', $_SESSION['user_id']);
         <img src="../images/two_bedroom.png" alt="Two Bedroom" />
         <div class="card-body text-center">
             <h5 class="fw-bold mt-2">Two Bedroom</h5>
-            <a href="#" data-bs-toggle="modal" data-bs-target="#roomModal"
-               onclick="openRoomModal('Two Bedroom', 'Spacious room with two beds and a mini-living space.', '/images/two_bedroom.jpeg')">Details</a><br>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#roomModal" style="text-decoration: none;"
+               onclick="openRoomModal('Two Bedroom', 'Spacious room with two beds and a mini-living space.', '../images/two_bedroom.png')">Details</a><br>
             <button class="btn btn-info text-white rounded-pill mt-2"
                     data-bs-toggle="modal" data-bs-target="#createModal">Add room +</button>
         </div>
@@ -180,8 +180,8 @@ $reservations = Reservation::findByColumn('user_id', $_SESSION['user_id']);
         <img src="../images/family_bedroom.png" alt="Family Bedroom" />
         <div class="card-body text-center">
             <h5 class="fw-bold mt-2">Family Bedroom</h5>
-            <a href="#" data-bs-toggle="modal" data-bs-target="#roomModal"
-               onclick="openRoomModal('Family Bedroom', 'Ideal for families with children. Comes with extra bedding and space.', '/images/family_bedroom.jpeg')">Details</a><br>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#roomModal" style="text-decoration: none;"
+               onclick="openRoomModal('Family Bedroom', 'Ideal for families with children. Comes with extra bedding and space.', '../images/family_bedroom.png')">Details</a><br>
             <button class="btn btn-info text-white rounded-pill mt-2"
                     data-bs-toggle="modal" data-bs-target="#createModal">Add room +</button>
         </div>
@@ -191,8 +191,8 @@ $reservations = Reservation::findByColumn('user_id', $_SESSION['user_id']);
         <img src="../images/suite.png" alt="Deluxe Bedroom" />
         <div class="card-body text-center">
             <h5 class="fw-bold mt-2">Deluxe Bedroom</h5>
-            <a href="#" data-bs-toggle="modal" data-bs-target="#roomModal"
-               onclick="openRoomModal('Deluxe Bedroom', 'Premium luxury with elegant design and full amenities.', '/images/suite.jpeg')">Details</a><br>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#roomModal" style="text-decoration: none;"
+               onclick="openRoomModal('Deluxe Bedroom', 'Premium luxury with elegant design and full amenities.', '../images/suite.png')">Details</a><br>
             <button class="btn btn-info text-white rounded-pill mt-2"
                     data-bs-toggle="modal" data-bs-target="#createModal">Add room +</button>
         </div>
