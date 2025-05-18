@@ -1,8 +1,12 @@
 <?php 
-require_once '/git/Moses_hbms/layout/modals/modals.php';
+include '../layout/modals/modals.php';
+
+?>
+<?php 
+$modals = new Modals();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en">  
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />

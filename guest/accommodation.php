@@ -1,5 +1,5 @@
 <?php 
-$modals = new Modals();
+include 'header.php';
 ?>
 
 <head>

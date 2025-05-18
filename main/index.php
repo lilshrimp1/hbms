@@ -195,9 +195,10 @@ if ($userRole != 'Guest') {
 </style>
 
 <link href="assets/tagabenta/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<div class="container-xxl mt-5">
+
+<div class="container-xxl ml-5">
     <div class="card shadow-lg">
-        <div class="card-body">
+        <div class="card-body" >
             <?php if ($userRole == 'Super Admin'): ?>
                 <!-- Super Admin Dashboard -->
                 <div class="row">
@@ -689,4 +690,5 @@ if ($userRole != 'Guest') {
         </div>
     </div>
 </div>
+                                  
 <?php include '../layout/footer.php'; ?>

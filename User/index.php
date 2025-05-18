@@ -1,18 +1,3 @@
-<?php require_once '../Database/database.php';
-      require_once '../models/User.php';
-    $database = new database();
-    $conn = $database->getConnection();
-?>
-<?php session_start();?>
-<?php include '../layout/header.php'; ?>
-<?php include '../auth/super.php'; ?>
-
-<?php
-User::setConnection($conn);
-$users = User::all();
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,6 +9,7 @@ $users = User::all();
     <style>
         body {
             font-family: 'Inter', sans-serif;
+
         }
 
         #navbar {
@@ -58,6 +44,8 @@ $users = User::all();
         main {
             margin-left: 0;
             transition: margin-left 0.3s ease-in-out;
+            display: flex; /* Added flex display to center content */
+            justify-content: center; /* Centers content horizontally */
         }
 
         main.shifted {
@@ -69,7 +57,6 @@ $users = User::all();
             border-radius: 2rem;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             padding: 1.5rem;
-            justify-content: center;
             max-width: 100%;
             width: auto; /* Make the container adjust to its content */
         }
@@ -182,7 +169,7 @@ $users = User::all();
         }
     </style>
 </head>
-<body class="bg" style="background-image:url(../image/bg.png); position:fixed;">
+<body class="bg" style="background-image:url(../image/bg.png); position:fixed; ">
     <div class="flex">
         <aside id="navbar" class=" text-blue-800 w-64" style="font-size: 20px; background-color: rgba(75, 216, 226, 0.75);">
 
@@ -227,8 +214,7 @@ $users = User::all();
                             </div>
 
                             <div class = "profile mr-4">
-                                <div class="text-gray-600 mr-4">Super</div>
-                                <img src="https://placehold.co/40x40/80ED99/fff?text=U&font=Montserrat" alt="User Avatar" class="rounded-full">
+                                <div class="text-gray-600 mr-4">Super</div> <img src="https://placehold.co/40x40/80ED99/fff?text=U&font=Montserrat" alt="User Avatar" class="rounded-full">
                             </div>
                         </header>
 
