@@ -1,8 +1,20 @@
 <?php
-include 'css.css';
-include 'Jscript.js';
+
 
 class Modals {
+    private $css;
+    private $js;
+
+    public function __construct($css = 'css.css', $js = 'Jscript.js') {
+        $this->css = $css;
+        $this->js = $js;
+        $this->includeAssets();
+    }
+
+    private function includeAssets() {
+        echo "<link rel='stylesheet' href='css.css'>";
+        echo "<script src='Jscript.js'></script>";
+    }
 
     public function layout($modal, $action) {
         $title = '';
