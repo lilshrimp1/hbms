@@ -1,51 +1,49 @@
-<?php 
+<?php
 session_start();
 require_once '../Database/database.php';
 require_once '../models/User.php';
 require_once '../auth/super.php';
-include '../layout/header.php';
 
-$database = new database();
+header('Content-Type: application/json'); // Respond with JSON
+
+$database = new Database();
 $conn = $database->getConnection();
-
 User::setConnection($conn);
 
+// Validate required GET parameters
+if (!isset($_GET['id']) || !isset($_GET['password'])) {
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Missing required parameters.'
+    ]);
+    exit;
+}
+
 $id = $_GET['id'];
+$password = $_GET['password'];
 
 $user = User::find($id);
-$hashedPassword = password_hash($_GET['password'], PASSWORD_DEFAULT);
+
+if (!$user) {
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'User not found.'
+    ]);
+    exit;
+}
+
+// Hash the new password and update
+$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 $user->password = $hashedPassword;
 
-
-$user->save();
-
-if ($user) {
-    echo '<script>
-            Swal.fire({
-                title: "Success!",
-                text: "Password has been updated.",
-                icon: "success",
-                confirmButtonText: "Ok"
-            }).then(function() {
-                window.location = "index.php";
-            });
-        </script>';
+if ($user->save()) {
+    echo json_encode([
+        'status' => 'success',
+        'message' => 'Password updated successfully.'
+    ]);
 } else {
-        echo '<script>
-                Swal.fire({
-                    title: "Error!",
-                    text: "Failed to update Password.",
-                    icon: "error",
-                    confirmButtonText: "Ok"
-                }).then(function() {
-                    window.location = "edit.php?id=' . $id . '";
-                });
-            </script>';
-    }
-
-
-
-
-?>
-
-<?php include '../layout/footer.php';?>
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Failed to update password.'
+    ]);
+}
