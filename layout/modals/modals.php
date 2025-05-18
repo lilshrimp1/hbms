@@ -1,15 +1,15 @@
 <?php
 
 class Modals {
-    private $css = 'css.css';
-    private $js = 'Jscript.js';
+    private static $css = 'css.css';
+    private static $js = 'Jscript.js';
 
     public function __construct($css = 'css.css', $js = 'Jscript.js') {
-        $this->css = $css;
-        $this->js = $js;
+        self::$css = $css;
+        self::$js = $js;
     }
 
-    public function layout($modal, $action, $data = []) {
+    public static function layout($modal, $action, $data = []) {
         $title = '';
         $buttonText = '';
         $actionUrl = '#';
@@ -17,7 +17,7 @@ class Modals {
 
         if ($modal === 'bookingDetails') {
             $title = 'Booking Details';
-            $content = $this->bookingDetails($data); // Display booking details
+            $content = self::bookingDetails($data);
         } else {
             switch ($modal) {
                 case 'create':
@@ -25,30 +25,30 @@ class Modals {
                         $title = 'Register';
                         $buttonText = 'REGISTER';
                         $actionUrl = 'signup.php';
-                        $content = $this->registerForm();
+                        $content = self::registerForm();
                     } elseif ($action === 'book') {
                         $title = 'Book Room';
                         $buttonText = 'RESERVE';
                         $actionUrl = 'booking.php';
-                        $content = $this->bookingFormDetails($data); // Display booking form details
+                        $content = self::bookingFormDetails($data);
                     } elseif ($action === 'feedback') {
                         $title = 'Feedback';
                         $buttonText = 'SUBMIT';
                         $actionUrl = 'feedback.php';
-                        $content = $this->feedbackForm();
+                        $content = self::feedbackForm();
                     }
                     break;
                 case 'update':
                     $title = 'Edit Profile';
                     $buttonText = 'Update';
                     $actionUrl = 'update.php';
-                    $content = $this->editProfileForm();
+                    $content = self::editProfileForm();
                     break;
                 default:
                     $title = 'Modal';
                     $buttonText = 'SUBMIT';
                     $actionUrl = '#';
-                    $content = $this->registerForm();
+                    $content = self::registerForm();
                     break;
             }
         }
@@ -66,7 +66,7 @@ class Modals {
         </div>";
     }
 
-    private function bookingDetails($data) { // Display booking details
+    private static function bookingDetails($data) {
         $roomType = isset($data['room_type_name']) ? htmlspecialchars($data['room_type_name']) : 'N/A';
         $roomNumber = isset($data['room_number']) ? htmlspecialchars($data['room_number']) : 'N/A';
         $checkIn = isset($data['check_in']) ? htmlspecialchars(date('m/d/Y', strtotime($data['check_in']))) : 'N/A';
@@ -89,22 +89,19 @@ class Modals {
         </style>";
     }
 
-        private function bookingFormDetails() { // Display booking form details
+    private static function bookingFormDetails() {
         global $conn;
 
         if (!$conn) {
-            die("Connection failed: " . mysqli_connect_error());
+            die("Connection failed.");
         }
 
-        // Fetch room types from the database
         $roomTypesQuery = "SELECT id, name FROM room_types";
-        $roomTypesResult = mysqli_query($conn, $roomTypesQuery);
+        $roomTypesResult = $conn->query($roomTypesQuery);
 
-        // Fetch amenities from the database
         $amenitiesQuery = "SELECT id, name FROM amenities";
-        $amenitiesResult = mysqli_query($conn, $amenitiesQuery);
+        $amenitiesResult = $conn->query($amenitiesQuery);
 
-        // Start the form
         $form = "<form id='bookingForm' method='post' action='process_booking.php'>
             <div class='d-flex gap-3'>
                 <div style='flex: 1;'>
@@ -126,8 +123,8 @@ class Modals {
                     <div class='mb-3'>
                         <label for='roomType' class='form-label'>Room Type:</label>
                         <select class='form-select' id='roomType' name='roomType' required>";
-        if (mysqli_num_rows($roomTypesResult) > 0) {
-            while ($roomType = mysqli_fetch_assoc($roomTypesResult)) {
+        if ($roomTypesResult && $roomTypesResult->rowCount() > 0) {
+            while ($roomType = $roomTypesResult->fetch(PDO::FETCH_ASSOC)) {
                 $form .= "<option value='" . $roomType['id'] . "'>" . $roomType['name'] . "</option>";
             }
         } else {
@@ -145,8 +142,8 @@ class Modals {
                     </div>
                     <div class='mb-3'>
                         <label for='amenities' class='form-label'>Amenities:</label><br>";
-        if (mysqli_num_rows($amenitiesResult) > 0) {
-            while ($amenity = mysqli_fetch_assoc($amenitiesResult)) {
+        if ($amenitiesResult && $amenitiesResult->rowCount() > 0) {
+            while ($amenity = $amenitiesResult->fetch(PDO::FETCH_ASSOC)) {
                 $form .= "<input type='checkbox'  id='amenity_" . $amenity['id'] . "' name='amenities[]' value='" . $amenity['id'] . "'>
                         <label for='amenity_" . $amenity['id'] . "'>" . $amenity['name'] . "</label><br>";
             }
@@ -178,8 +175,7 @@ class Modals {
         return $form;
     }
 
-
-    private function registerForm() {
+    private static function registerForm() {
         return "
         <form action='#' method='POST'>
             <div class='mb-2'>
@@ -209,7 +205,7 @@ class Modals {
         </form>";
     }
 
-    private function feedbackForm() {
+    private static function feedbackForm() {
         return "
         <div class='feedback-list'>
             <div class='feedback-item'>
@@ -240,7 +236,7 @@ class Modals {
         </div>";
     }
 
-    private function editProfileForm() {
+    private static function editProfileForm() {
         return "
         <form action='update.php' method='POST'>
             <div class='mb-3'>
@@ -268,7 +264,6 @@ class ImagePaths {
             'Two Bed Room' => 'two_bedroom.png',
             'Family Room' => 'family_bedroom.png',
             'Deluxe Room' => 'suite.png',
-            // ... add more room type to image mappings as needed
         ];
 
         if (array_key_exists($room_type_name, $imageFiles)) {
@@ -278,4 +273,7 @@ class ImagePaths {
         }
     }
 }
+
+// This prints the create->book modal with id "createModal"
+echo Modals::layout('create', 'book');
 ?>

@@ -164,7 +164,7 @@ foreach ($allBookingHistoryDetails as $detail) {
 
     <?php
     // Modal for displaying room details
-    echo $modals->layout('roomDetails', 'Room Details', ['<div id="modal-room-details"></div>']);
+    echo $modals::layout('roomDetails', 'Room Details', ['<div id="modal-room-details"></div>']);
     ?>
 
 </div>
