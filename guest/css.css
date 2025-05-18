@@ -17,7 +17,7 @@ header h1 {
 }
 
 .textcenter {
-    background-image: url('/HOTEL-BOOKING-MANAGEMENT-SYSTEM/photos/bgimg.jpeg');
+    background-image: url('../images/bgimg.jpeg');
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
