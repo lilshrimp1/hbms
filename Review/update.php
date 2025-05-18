@@ -28,6 +28,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $message = 'Review not found.';
         }
+
+$status = $_GET['status'];
+
+$review = Review::find($status);
+
+
+$amenity->save();
+
+if ($amenity) {
+    if ($amenity) {
+        echo '<script>
+                Swal.fire({
+                    title: "Success!",
+                    text: "Status has been updated.",
+                    icon: "success",
+                    confirmButtonText: "Ok"
+                }).then(function() {
+                    window.location = "index.php";
+                });
+            </script>';
+
     } else {
         $message = 'Missing review ID or status.';
     }
