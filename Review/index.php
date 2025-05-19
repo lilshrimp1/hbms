@@ -280,7 +280,7 @@ if (!$reviews) {
                                 <span class="icon"><i class="fa fa-file-pdf"></i></span>
                                 <span class="text">Feedback</span></a>
                         </li>
-                        <li><a href="../main/pdf.php">
+                        <li><a href="../Reservation/index.php">
                                 <span class="icon"><i class="fa fa-file-pdf"></i></span>
                                 <span class="text">Reservation</span></a>
                         </li>

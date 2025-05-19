@@ -34,6 +34,48 @@ class Model {
         }
     }
 
+    protected static function isUsedInReservation($amenity_id) {
+        // This query checks if the amenity is linked to any room that has been reserved
+        $sql = "SELECT COUNT(*) FROM reservations r
+                JOIN room_amenities ra ON r.room_id = ra.room_id
+                WHERE ra.amenity_id = ?";
+        
+        $stmt = self::$conn->prepare($sql);
+        $stmt->execute([$amenity_id]);
+        $count = $stmt->fetchColumn();
+        return $count > 0;
+    }
+
+    protected static function getCurrentGuestInfo($amenity_id) {
+        $sql = "SELECT u.name, u.contact_no AS contact, r.check_in, r.check_out, r.guests AS guest_count
+                FROM room_amenities ra
+                JOIN room rm ON ra.room_id = rm.id
+                JOIN reservations r ON r.room_id = rm.id
+                JOIN users u ON r.user_id = u.id
+                WHERE ra.amenity_id = ? 
+                AND r.check_in <= CURRENT_DATE()
+                AND r.check_out >= CURRENT_DATE()
+                AND r.status = 'confirmed'
+                LIMIT 1";
+        $stmt = self::$conn->prepare($sql);
+        $stmt->execute([$amenity_id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ? $row : null;
+    }
+
+    protected static function hasPastReservations($room_id) {
+        try {
+            $sql = "SELECT COUNT(*) as count FROM reservations WHERE room_id = :room_id AND check_out < NOW()";
+            $stmt = self::$conn->prepare($sql);
+            $stmt->bindValue(':room_id', $room_id);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return ($result && $result['count'] > 0);
+        } catch (PDOException $e) {
+        error_log("Error checking past reservations: " . $e->getMessage());
+        return false;
+    }
+}
     protected static function all() {
         try {
             $sql = "SELECT * FROM " . static::$table . " ORDER BY id ASC";
