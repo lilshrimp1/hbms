@@ -23,15 +23,14 @@ $conn = $database->getConnection();
 Reservation::setConnection($conn);
 Room::setConnection($conn);
 
-// Get reservation and additional room details
-$reservation_id = $_POST['reservation_id'] ?? null;
-$additional_room_id = $_POST['additional_room_id'] ?? null;
+// Get reservation ID from POST or GET
+$reservation_id = $_POST['reservation_id'] ?? $_GET['reservation_id'] ?? null;
 
-if (!$reservation_id || !$additional_room_id) {
+if (!$reservation_id) {
     echo '<script>
             Swal.fire({
                 title: "Error!",
-                text: "Missing required parameters.",
+                text: "Missing reservation ID.",
                 icon: "error",
                 confirmButtonText: "Ok"
             });
@@ -39,15 +38,25 @@ if (!$reservation_id || !$additional_room_id) {
     exit;
 }
 
-// Fetch the reservation and additional room
+// Fetch the reservation and its room
 $reservation = Reservation::find($reservation_id);
-$additional_room = Room::find($additional_room_id);
-
-if (!$reservation || !$additional_room) {
+if (!$reservation) {
     echo '<script>
             Swal.fire({
                 title: "Error!",
-                text: "Reservation or room not found.",
+                text: "Reservation not found.",
+                icon: "error",
+                confirmButtonText: "Ok"
+            });
+        </script>';
+    exit;
+}
+$room = Room::find($reservation->room_id);
+if (!$room) {
+    echo '<script>
+            Swal.fire({
+                title: "Error!",
+                text: "Room not found.",
                 icon: "error",
                 confirmButtonText: "Ok"
             });
@@ -55,45 +64,81 @@ if (!$reservation || !$additional_room) {
     exit;
 }
 
-try {
-    // Create a new reservation for the additional room
-    $additional_reservation = Reservation::create([
-        'user_id' => $reservation->user_id,
-        'room_id' => $additional_room_id,
-        'check_in' => $reservation->check_in,
-        'check_out' => $reservation->check_out,
-        'guests' => $_POST['overflow_guests'],
-        'status' => $reservation->status,
-        'total_bill' => $additional_room->price,
-        'parent_reservation_id' => $reservation_id,
-        'created_at' => date('Y-m-d H:i:s'),
-        'updated_at' => date('Y-m-d H:i:s')
-    ]);
+// Check if guest count exceeds room capacity
+if ($reservation->guests > $room->capacity) {
+    $overflow_guests = $reservation->guests - $room->capacity;
 
-    // Update additional room status
-    $additional_room->update([
-        'status' => 'booked',
-        'updated_at' => date('Y-m-d H:i:s')
-    ]);
+    // Find an available room with enough capacity for overflow guests
+    $sql = "SELECT * FROM room WHERE status = 'available' AND capacity >= :overflow_guests LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindValue(':overflow_guests', $overflow_guests, PDO::PARAM_INT);
+    $stmt->execute();
+    $additional_room = $stmt->fetch(PDO::FETCH_OBJ);
 
+    if (!$additional_room) {
+        echo '<script>
+                Swal.fire({
+                    title: "Error!",
+                    text: "No available room for overflow guests.",
+                    icon: "error",
+                    confirmButtonText: "Ok"
+                });
+            </script>';
+        exit;
+    }
+
+    try {
+        // Create a new reservation for the additional room
+        $additional_reservation = Reservation::create([
+            'user_id' => $reservation->user_id,
+            'room_id' => $additional_room->id,
+            'check_in' => $reservation->check_in,
+            'check_out' => $reservation->check_out,
+            'guests' => $overflow_guests,
+            'status' => $reservation->status,
+            'total_bill' => $additional_room->price,
+            'parent_reservation_id' => $reservation_id,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
+
+        // Update additional room status
+        Room::setConnection($conn);
+        $roomObj = Room::find($additional_room->id);
+        $roomObj->status = 'booked';
+        $roomObj->updated_at = date('Y-m-d H:i:s');
+        $roomObj->save();
+
+        echo '<script>
+                Swal.fire({
+                    title: "Success!",
+                    text: "Additional room assigned for overflow guests.",
+                    icon: "success",
+                    confirmButtonText: "Ok"
+                }).then(function() {
+                    window.location = "show.php?id=' . $reservation_id . '";
+                });
+            </script>';
+
+    } catch (Exception $e) {
+        echo '<script>
+                Swal.fire({
+                    title: "Error!",
+                    text: "Failed to assign additional room: ' . $e->getMessage() . '",
+                    icon: "error",
+                    confirmButtonText: "Ok"
+                });
+            </script>';
+    }
+} else {
     echo '<script>
             Swal.fire({
-                title: "Success!",
-                text: "Additional room assigned successfully.",
-                icon: "success",
+                title: "Info",
+                text: "No overflow. Guest count fits in the current room.",
+                icon: "info",
                 confirmButtonText: "Ok"
             }).then(function() {
                 window.location = "show.php?id=' . $reservation_id . '";
-            });
-        </script>';
-
-} catch (Exception $e) {
-    echo '<script>
-            Swal.fire({
-                title: "Error!",
-                text: "Failed to assign additional room: ' . $e->getMessage() . '",
-                icon: "error",
-                confirmButtonText: "Ok"
             });
         </script>';
 }

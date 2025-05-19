@@ -52,19 +52,45 @@ try {
             background-size: cover;
             font-family: 'Cal Sans', sans-serif;
         }
-        .data-table-container {
-            background-color: white;
-            border-radius: 0.75rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 1.5rem; 
-            margin-top: 100px; 
-            margin-left: auto;
-            margin-right: auto; 
-            max-width: 800px;
+
+        .container-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin-left: 560px; 
+            padding: 2 2rem; 
+        }
+
+        .edit-review-card {
+            background-color: #fff;
+            padding: 4rem;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            margin-top: -150px;
         }
     </style>
 </head>
 <body>
+
+
+<?php include '../layout/sidebar.php'; ?>
+
+<div class="container-center">
+    <div class="edit-review-card">
+        <h3 class="text-center mb-4">Edit Review</h3>
+
+        <form action="update.php" method="POST">
+            <input type="hidden" name="id" value="<?= htmlspecialchars($review['id']) ?>">
+
+            <div class="mb-3">
+                <label for="status" class="form-label fw-semibold">Status</label>
+                <select class="form-select" name="status" id="status" required>
+                    <option value="Visible" <?= $review['status'] == 'Visible' ? 'selected' : '' ?>>Visible</option>
+                    <option value="Hidden" <?= $review['status'] == 'Hidden' ? 'selected' : '' ?>>Hidden</option>
+                    <option value="Deleted" <?= $review['status'] == 'Deleted' ? 'selected' : '' ?>>Deleted</option>
 
 <div class="container data-table-container">
     <h3>Edit Review Status</h3>
@@ -180,23 +206,24 @@ try {
                 <select name="status" id="status" class="form-select">
                     <option value="active" <?= $review['status'] === 'active' ? 'selected' : '' ?>>Active</option>
                     <option value="inactive" <?= $review['status'] === 'inactive' ? 'selected' : '' ?>>Inactive</option>
+
                 </select>
             </div>
 
             <?php if ($user): ?>
-                <hr>
-                <h5>User Info</h5>
-                <p><strong>Name:</strong> <?= htmlspecialchars($user->name) ?></p>
-                <p><strong>Email:</strong> <?= htmlspecialchars($user->email) ?></p>
+            <div class="mb-3 border-top pt-3">
+                <h6 class="mb-2">User Information</h6>
+                <p class="mb-1"><strong>Name:</strong> <?= htmlspecialchars($user->name) ?></p>
+                <p class="mb-0"><strong>Email:</strong> <?= htmlspecialchars($user->email) ?></p>
+            </div>
             <?php endif; ?>
 
-            <div class="mt-4 d-flex justify-content-between">
+            <div class="d-flex justify-content-end gap-2">
                 <a href="index.php" class="btn btn-secondary">Cancel</a>
-                <button type="submit" class="btn btn-primary">Update Review</button>
+                <button type="submit" class="btn btn-primary">Update Status</button>
             </div>
         </form>
     </div>
-
 </div>
 
 </body>
