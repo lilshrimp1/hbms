@@ -1,5 +1,6 @@
 <?php
 session_start();
+include '../layout/header.php';
 require_once '../Database/database.php';
 require_once '../models/Reservation.php';
 require_once '../models/Room.php';
@@ -85,6 +86,7 @@ if ($reservation->guests > $room->capacity) {
 
     if (!$additional_room) {
         echo '<script>
+
                 document.addEventListener("DOMContentLoaded", function() {
                     Swal.fire({
                         title: "Error!",
@@ -94,6 +96,17 @@ if ($reservation->guests > $room->capacity) {
                     });
                 });
             </script>';
+
+        document.addEventListener("DOMContentLoaded", function() {
+            Swal.fire({
+                title: "Error!",
+                text: "No available room for overflow guests.",
+                icon: "error",
+                confirmButtonText: "Ok"
+            });
+        });
+    </script>';
+
         exit;
     }
 
@@ -120,6 +133,7 @@ if ($reservation->guests > $room->capacity) {
         $roomObj->save();
 
         echo '<script>
+
                 document.addEventListener("DOMContentLoaded", function() {
                     Swal.fire({
                         title: "Success!",
@@ -151,7 +165,44 @@ if ($reservation->guests > $room->capacity) {
                     icon: "success",
                     confirmButtonText: "Ok"
                 });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            Swal.fire({
+                title: "Success!",
+                text: "Additional room assigned for overflow guests.",
+                icon: "success",
+                confirmButtonText: "Ok"
+            }).then(function() {
+                window.location = "show.php?id=' . $reservation_id . '";
             });
-        </script>';
+        });
+    </script>';
+
+    } catch (Exception $e) {
+        echo '<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            Swal.fire({
+                title: "Error!",
+                text: "Failed to assign additional room: ' . $e->getMessage() . '",
+                icon: "error",
+                confirmButtonText: "Ok"
+            });
+        });
+    </script>';
+    }
+} else {
+    echo '<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            Swal.fire({
+                title: "Info",
+                text: "No overflow. Guest count fits in the current room.",
+                icon: "info",
+                confirmButtonText: "Ok"
+            }).then(function() {
+                window.location = "show.php?id=' . $reservation_id . '";
+
+            });
+        });
+    </script>';
 }
 ?>

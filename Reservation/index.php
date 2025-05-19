@@ -351,14 +351,14 @@
                                 <td><?= $room->status?></td>
                                 <td><?= $payment ? $payment->status : 'N/A' ?></td>
                                 <td class="actions-cell">
-                                    <?php if ($reservation->status == 'pending'): ?>
+                                    <?php if ($reservation->guests > $room->capacity): ?>
+                                        <a href="overcapacity.php?id=<?= $reservation->id ?>" class="action-button deactivate-button">Overcapacity</a>
+                                    <?php elseif ($reservation->status == 'pending'): ?>
                                         <a href="confirm.php?id=<?= $reservation->id ?>" class="action-button view-button">Confirm Status</a>
                                     <?php elseif (empty($reservation->check_in) || $reservation->check_in == 'N/A'): ?>
                                         <a href="check_in.php?id=<?= $reservation->id ?>&action=check_in" class="action-button edit-button">Check In</a>
                                     <?php elseif ($reservation->check_in == 'checked-in'): ?>
                                         <a href="check_out.php?id=<?= $reservation->id ?>&action=check_out" class="action-button deactivate-button">Check Out</a>
-                                    <?php elseif ($reservation->guests < $room->capacity): ?>
-                                        <a href="overcapacity.php?id=<?= $reservation->id ?>" class="action-button deactivate-button">Overcapacity</a>
                                     <?php endif; ?>
                                 </td>
                             </tr>
