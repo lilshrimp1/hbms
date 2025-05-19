@@ -86,6 +86,17 @@ if ($reservation->guests > $room->capacity) {
 
     if (!$additional_room) {
         echo '<script>
+
+                document.addEventListener("DOMContentLoaded", function() {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "No available room for overflow guests.",
+                        icon: "error",
+                        confirmButtonText: "Ok"
+                    });
+                });
+            </script>';
+
         document.addEventListener("DOMContentLoaded", function() {
             Swal.fire({
                 title: "Error!",
@@ -95,6 +106,7 @@ if ($reservation->guests > $room->capacity) {
             });
         });
     </script>';
+
         exit;
     }
 
@@ -121,6 +133,39 @@ if ($reservation->guests > $room->capacity) {
         $roomObj->save();
 
         echo '<script>
+
+                document.addEventListener("DOMContentLoaded", function() {
+                    Swal.fire({
+                        title: "Success!",
+                        text: "Additional room assigned for overflow guests.",
+                        icon: "success",
+                        confirmButtonText: "Ok"
+                    });
+                });
+            </script>';
+
+    } catch (Exception $e) {
+        echo '<script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Failed to assign additional room: ' . $e->getMessage() . '",
+                        icon: "error",
+                        confirmButtonText: "Ok"
+                    });
+                });
+            </script>';
+    }
+} else {
+    echo '<script>
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    title: "Success!",
+                    text: "No overflow. Guest count fits in the current room.",
+                    icon: "success",
+                    confirmButtonText: "Ok"
+                });
+
         document.addEventListener("DOMContentLoaded", function() {
             Swal.fire({
                 title: "Success!",
@@ -155,6 +200,7 @@ if ($reservation->guests > $room->capacity) {
                 confirmButtonText: "Ok"
             }).then(function() {
                 window.location = "show.php?id=' . $reservation_id . '";
+
             });
         });
     </script>';
