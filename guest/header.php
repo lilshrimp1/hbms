@@ -56,9 +56,13 @@ $user = User::find($_SESSION['user_id']);
         <li class="nav-item" style="margin-right:100px;"><a class="nav-link fw-semibold" href="index.php">Home</a></li>
         <li class="nav-item" style="margin-right:100px;"><a class="nav-link fw-semibold" href="accommodation.php">Accommodation</a></li>
         <li class="nav-item" style="margin-right:450px;"><a class="nav-link fw-semibold" href="profile.php">Manage Profile</a></li>
-        <li class="nav-item">
-          <a class="nav-link" href="profile.php" style="margin-right: 100px;"><i class="bi bi-person-circle"></i> <?php echo $user->name; ?></a>
-          <a class="nav-link" href="../auth/logout.php" style="margin-right: 100px;"><i class="bi bi-box-arrow-right"></i> Logout</a>
+        <li class="nav-item d-flex align-items-center gap-3" style="margin-right: 100px;">
+          <a class="nav-link p-0" href="profile.php"><i class="bi bi-person-circle"></i> <?php echo $user->name; ?></a>
+          <form action="../auth/logout.php" method="POST" style="margin: 0; padding: 0;">
+            <button type="submit" class="btn btn-link p-3" style="padding: 20px; border: none; background: none; color: red; cursor: pointer; text-decoration: none; margin-right:-30px;">
+              <i class="bi bi-box-arrow-right"></i> Logout
+            </button>
+          </form>
         </li>
       </ul>
     </div>
