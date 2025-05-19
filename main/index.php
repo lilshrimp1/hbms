@@ -40,6 +40,7 @@ $reservation_history = [];
 $upcoming_guest_bookings = [];
 $upcoming_bookings = [];
 $occupied_rooms = $out_of_order_rooms = $vacant_ready_rooms = $vacant_not_ready_rooms = 0;
+$review_error = ''; // Added for debugging reviews
 
 // Room availability stats (single query)
 try {
@@ -77,22 +78,24 @@ try {
 
 // Latest reviews
 try {
-    // Replace 'reservation_id' with the correct column name after verifying the schema (e.g., 'res_id')
+    // Changed 'res_id' to 'reservation_id' (adjust based on your schema)
     $sql_reviews = "SELECT r.id, r.rating, r.comment, r.created_at, u.name as guest_name
                     FROM reviews r
-                    JOIN reservations res ON r.res_id = res.id
+                    JOIN reservations res ON r.reservation_id = res.id
                     JOIN users u ON res.user_id = u.id
                     WHERE r.status = :status
                     ORDER BY r.created_at DESC
                     LIMIT 5";
-    error_log("Executing reviews query: " . $sql_reviews);
+    error_log("Executing reviews query with status=approved");
     $stmt_reviews = $conn->prepare($sql_reviews);
     $stmt_reviews->bindValue(':status', 'approved');
     $stmt_reviews->execute();
     $latest_reviews = $stmt_reviews->fetchAll(PDO::FETCH_ASSOC);
+    error_log("Number of reviews fetched: " . count($latest_reviews));
 } catch (PDOException $e) {
     error_log("Error fetching reviews: " . $e->getMessage());
     $latest_reviews = [];
+    $review_error = "Unable to load reviews due to a database issue: " . htmlspecialchars($e->getMessage());
 }
 
 // Count all approved reviews
@@ -198,7 +201,7 @@ if ($userRole != 'Guest') {
 
 <div class="container-xxl ml-5">
     <div class="card shadow-lg">
-        <div class="card-body" >
+        <div class="card-body">
             <?php if ($userRole == 'Super Admin'): ?>
                 <!-- Super Admin Dashboard -->
                 <div class="row">
@@ -273,14 +276,16 @@ if ($userRole != 'Guest') {
                                 <h2 class="reviews-title">LATEST FEEDBACKS</h2>
                                 <span class="reviews-count">Total Visible Reviews: <?= htmlspecialchars($total_visible_reviews) ?></span>
                             </div>
-                            <?php if (!empty($latest_reviews)): ?>
+                            <?php if (!empty($review_error)): ?>
+                                <div class="alert alert-danger"><?= $review_error ?></div>
+                            <?php elseif (!empty($latest_reviews)): ?>
                                 <?php foreach ($latest_reviews as $review): ?>
                                     <div class="review-card">
-                                        <div class="reviewer-name"><?= htmlspecialchars($review['guest_name']) ?></div>
-                                        <div class="review-text"><?= htmlspecialchars(mb_strimwidth($review['comment'], 0, 100, '...')) ?></div>
+                                        <div class="reviewer-name"><?= htmlspecialchars($review['guest_name'] ?? 'Unknown Guest') ?></div>
+                                        <div class="review-text"><?= htmlspecialchars(mb_strimwidth($review['comment'] ?? '', 0, 100, '...')) ?></div>
                                         <div class="rating">
                                             <?php
-                                            $rating = (int)$review['rating'];
+                                            $rating = (int)($review['rating'] ?? 0);
                                             for ($i = 0; $i < $rating; $i++) {
                                                 echo "★";
                                             }
@@ -409,14 +414,16 @@ if ($userRole != 'Guest') {
                                 <h2 class="reviews-title">LATEST FEEDBACKS</h2>
                                 <span class="reviews-count">Total Visible Reviews: <?= htmlspecialchars($total_visible_reviews) ?></span>
                             </div>
-                            <?php if (!empty($latest_reviews)): ?>
+                            <?php if (!empty($review_error)): ?>
+                                <div class="alert alert-danger"><?= $review_error ?></div>
+                            <?php elseif (!empty($latest_reviews)): ?>
                                 <?php foreach ($latest_reviews as $review): ?>
                                     <div class="review-card">
-                                        <div class="reviewer-name"><?= htmlspecialchars($review['guest_name']) ?></div>
-                                        <div class="review-text"><?= htmlspecialchars(mb_strimwidth($review['comment'], 0, 100, '...')) ?></div>
+                                        <div class="reviewer-name"><?= htmlspecialchars($review['guest_name'] ?? 'Unknown Guest') ?></div>
+                                        <div class="review-text"><?= htmlspecialchars(mb_strimwidth($review['comment'] ?? '', 0, 100, '...')) ?></div>
                                         <div class="rating">
                                             <?php
-                                            $rating = (int)$review['rating'];
+                                            $rating = (int)($review['rating'] ?? 0);
                                             for ($i = 0; $i < $rating; $i++) {
                                                 echo "★";
                                             }
@@ -500,7 +507,7 @@ if ($userRole != 'Guest') {
                                             <div class="card-body text-center">
                                                 <label class="form-label fw-bold">Departures Today</label>
                                                 <h3><?= htmlspecialchars($todays_departures) ?></h3>
-                                            </UNDERLINE>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4 mb-3">
@@ -690,5 +697,5 @@ if ($userRole != 'Guest') {
         </div>
     </div>
 </div>
-                                  
+
 <?php include '../layout/footer.php'; ?>
