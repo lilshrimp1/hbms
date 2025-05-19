@@ -57,8 +57,8 @@ class Modals {
             $modalId = 'updateModal';
             $title = 'Edit Profile';
             $buttonText = 'Update';
-            
-            $content = self::editProfileForm(isset($data['user_id']) ? $data['user_id'] : null);
+
+            $content = self::editProfileForm(isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null);
             break;
         default:
             $modalId = 'defaultModal';
@@ -533,26 +533,28 @@ $form = "<form id='bookingForm' method='post' action='../guest/process_booking.p
         return $feedbackHtml;
     }
 
-    private static function editProfileForm($userId) {
+    private static function editProfileForm($userId = null) {
+        // Try to get user_id from POST if available
+        if (isset($_POST['user_id']) && !empty($_POST['user_id'])) {
+            $userId = $_POST['user_id'];
+        }
+
         if (!$userId) {
             return "<p>Error: User ID not provided.</p>";
         }
 
         try {
-            // Assuming the database connection is already established globally or through Model::setConnection()
             global $conn;
             if (!$conn) {
-                // Handle the case where the connection is not established
                 return "<p>Error: Database connection not established.</p>";
             }
 
-            // Use the User model to fetch user data
             $user = User::find($userId);
 
             if ($user) {
-                $name = htmlspecialchars($user['name']);
-                $contact = htmlspecialchars($user['contact_no']);
-                $address = htmlspecialchars($user['address']);
+                $name = htmlspecialchars($user->name);
+                $contact = htmlspecialchars($user->contact_no);
+                $address = htmlspecialchars($user->address);
 
                 return "
                 <form action='update.php' method='POST'>

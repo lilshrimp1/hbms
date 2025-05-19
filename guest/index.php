@@ -21,17 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reservation_id'])) {
         $reservation = Reservation::find($reservation_id);
         if ($reservation) {
             // Update fields
-            $reservation['room_type_id'] = $room_type_id;
-            $reservation['room_number'] = $room_number;
-            $reservation['check_in'] = $check_in;
-            $reservation['check_out'] = $check_out;
-            $reservation['guests'] = $guests;
-            $reservation['status'] = $status;
+            $reservation->room_type_id = $room_type_id;
+            $reservation->room_number = $room_number;
+            $reservation->check_in = $check_in;
+            $reservation->check_out = $check_out;
+            $reservation->guests = $guests;
+            $reservation->status = $status;
 
-            // Save update
-            $updated = $reservation->save();
 
-            if ($updated) {
+            if ($reservation->save()) {
                 $_SESSION['success_message'] = "Reservation updated successfully.";
             } else {
                 $_SESSION['error_message'] = "Failed to update reservation.";

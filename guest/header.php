@@ -57,7 +57,8 @@ $user = User::find($_SESSION['user_id']);
         <li class="nav-item" style="margin-right:100px;"><a class="nav-link fw-semibold" href="accommodation.php">Accommodation</a></li>
         <li class="nav-item" style="margin-right:450px;"><a class="nav-link fw-semibold" href="profile.php">Manage Profile</a></li>
         <li class="nav-item">
-          <a class="nav-link" href="#" style="margin-right: 100px;"><i class="bi bi-person-circle"></i> <?php echo $user->name; ?></a>
+          <a class="nav-link" href="profile.php" style="margin-right: 100px;"><i class="bi bi-person-circle"></i> <?php echo $user->name; ?></a>
+          <a class="nav-link" href="../auth/logout.php" style="margin-right: 100px;"><i class="bi bi-box-arrow-right"></i> Logout</a>
         </li>
       </ul>
     </div>

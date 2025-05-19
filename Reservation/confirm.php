@@ -19,6 +19,7 @@ if (!isset($_GET['id'])) {
 
 $id = $_GET['id'];
 $reservation = Reservation::findByColumn('id', $id);
+$room = Room::findByColumn('id', $reservation->room_id);
 
 if (!$reservation) {
     echo '<div class="alert alert-danger">Reservation not found.</div>';
@@ -27,12 +28,14 @@ if (!$reservation) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_reservation'])) {
     $reservation->status = 'Confirmed';
-    if (!$reservation->save()) {
+    $room->status = 'Booked';
+
+    if (!$reservation->save() && $room->save()) {
         echo '<script>
             document.addEventListener("DOMContentLoaded", function() {
                 Swal.fire({
                     title: "Success!",
-                    text: "Reservation status updated to Confirmed.",
+                    text: "Reservation status updated to Confirmed and room status set to Booked.",
                     icon: "success"
                 }).then(() => {
                     window.location = "index.php";
